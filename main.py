@@ -16,7 +16,7 @@ class CityApp(arcade.Window):
 
     def on_draw(self):
         # Очистка экрана и рендеринг
-        arcade.start_render()
+        self.clear()  # <-- исправлено
         arcade.draw_text(
             "City Simulator setup successful!",
             SCREEN_WIDTH / 2,
