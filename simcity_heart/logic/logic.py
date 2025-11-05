@@ -28,25 +28,25 @@ class Building:
 # House characteristics
 class House(Building):
     def __init__(self):
-        super().__init__('House', cost=100, happiness=2)
+        super().__init__('House', cost=1000, happiness=20)
 
 # Factory characteristics
 class Factory(Building):
     def __init__(self):
-        super().__init__('Factory', cost=300, income=5, happiness=-1)
+        super().__init__('Factory', cost=3000, income=50, happiness=-1)
 
 
 # CITY MONEY AND HAPPINESS
-city_money = 500
-city_happiness = 0
+city_money_start = 10000
+city_happiness_start = 0
 
 # The process of buying and placing a building
 def try_placing_building(x, y, building_type):
-    global city_money
+    global city_money_start
     building = building_type()
-    if grid[y][x] is None and city_money >= building.cost:
+    if grid[y][x] is None and city_money_start >= building.cost:
         grid[y][x] = building.name
-        city_money -= building.cost
+        city_money_start -= building.cost
 
 # RESOURCES AND TIME UPDATES
 # We will be running it through on_update() function every second.
@@ -62,4 +62,8 @@ def update_city():
                 player_happiness += tile.happiness
 
 #GAME STATE MANAGEMENT
+game_state = ''
+
+#Testing
+
 
