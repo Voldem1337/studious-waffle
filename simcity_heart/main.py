@@ -27,7 +27,7 @@ class MainView(arcade.View):
 
         #music loop
         self.music = arcade.Sound('assets/music/Menu_music.mp3')
-        self.music.play(volume = 0.2, loop = True)
+        self.music.play(volume = 0.5, loop = True)
 
         #variables
         self.bc.width = self.window_width
@@ -40,6 +40,10 @@ class MainView(arcade.View):
         self.menu_bar_right = self.window_middle_x + 135
         self.button_width = 300
         self.button_height = 74
+
+        #global volume
+        global volume
+        volume = 50
 
 
         #button position
@@ -55,7 +59,7 @@ class MainView(arcade.View):
         self.show_confirm = False
         self.show_settings = False
         self.dragging = False
-        self.handle_X = self.window_middle_x+153
+        self.left_handle_X = self.window_middle_x - 200
         self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
                                  20, anchor_x="center")
         self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
@@ -63,7 +67,9 @@ class MainView(arcade.View):
         self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
                               anchor_x="center", anchor_y="center")
         self.settings = arcade.Text("SETTINGS",self.window_middle_x, self.window_middle_y+250, arcade.color.WHITE,35, anchor_x="center")
-        self.volume =arcade.Text(f"Volume: {int(self.music.get_volume() )}%", self.window_middle_x, self.window_middle_y+185,
+        self.volume =arcade.Text(f"Volume: {volume}%", self.window_middle_x, self.window_middle_y+185,
+                         arcade.color.WHITE, 20, anchor_x="center")
+        self.back = arcade.Text('BACK', self.window_middle_x-150, self.window_middle_y-150,
                          arcade.color.WHITE, 20, anchor_x="center")
 
 
@@ -81,22 +87,24 @@ class MainView(arcade.View):
             self.yes.draw()
             self.no.draw()
 
-
         #setting window
         if self.show_settings:
-            arcade.draw_lbwh_rectangle_filled(0,0,self.window_width,self.window_height,(0, 0, 0, 200))
-            arcade.draw_lbwh_rectangle_filled(self.window_middle_x-300,self.window_middle_y-250,600,600,arcade.color.DARK_GRAY)
-            arcade.draw_lbwh_rectangle_outline(self.window_middle_x - 300, self.window_middle_y -250, 600, 600,arcade.color.WHITE, 3)
-            arcade.draw_lbwh_rectangle_filled(self.handle_X,self.window_middle_y,300,5,arcade.color.LIGHT_GRAY )
-
-            arcade.draw_circle_filled( self.handle_X,self.window_middle_y, 10,arcade.color.GOLD)
+            self.handle_X = self.left_handle_X + 350 * (volume / 100)
+            arcade.draw_lbwh_rectangle_filled(0, 0, self.window_width, self.window_height, (0, 0, 0, 200))
+            arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 300, self.window_middle_y - 250, 600, 600,
+                                              arcade.color.DARK_GRAY)
+            arcade.draw_lbwh_rectangle_outline(self.window_middle_x - 300, self.window_middle_y - 250, 600, 600,
+                                               arcade.color.WHITE, 3)
+            arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 200, self.window_middle_y + 125, 350, 5,
+                                              arcade.color.LIGHT_GRAY)
+            arcade.draw_circle_filled(self.handle_X, self.window_middle_y + 127, 10, arcade.color.GOLD)
             self.settings.draw()
             self.volume.draw()
-
+            self.back.draw()
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> bool | None:
         #defining what button is pressed
-        if not self.show_confirm:
+        if not self.show_confirm and not self.show_settings:
             for name, b in self.buttons.items():
                 if x >=b['x'] and x <= b['x'] + b['w'] and y >= b['y'] and y<= b['y'] + b['h']:
                     if name == "New Game":
@@ -117,22 +125,25 @@ class MainView(arcade.View):
                 self.show_confirm = False
                 self.clear()
 
+        elif self.show_settings:
+            # if abs(x - self.window_middle_x - 210) <= 10 * 2 and abs(y - self.window_middle_x - 210) <= 20:
+            #     self.dragging = True
+            if  self.window_middle_x-186 <= x <= self.window_middle_x-114 and self.window_middle_y-152 <= y <= self.window_middle_y-131:
+                self.show_settings = False
+                self.clear()
 
-        if self.show_settings:
-            if abs(x - self.window_middle_x - 210) <= 10 * 2 and abs(y - self.window_middle_x - 210) <= 20:
-                self.dragging = True
 
-    def on_mouse_release(self, x, y, button, modifiers):
-        self.dragging = False
-
-
-    def on_mouse_motion(self, x, y, dx, dy):
-        if self.dragging:
-            left  = self.window_middle_x - 210 -450/2
-            right = self.window_middle_x + 210 -450/2
-            self.handle_X = max(min(x, right), left)
-            self.volume = (self.handle_X - left) / (450)
-            pass
+    # def on_mouse_release(self, x, y, button, modifiers):
+    #     self.dragging = False
+    #
+    #
+    # def on_mouse_motion(self, x, y, dx, dy):
+    #     if self.dragging:
+    #         left  = self.window_middle_x - 210 -450/2
+    #         right = self.window_middle_x + 210 -450/2
+    #         self.handle_X = max(min(x, right), left)
+    #         self.volume = (self.handle_X - left) / (450)
+    #         pass
 
 
 
