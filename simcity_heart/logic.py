@@ -10,7 +10,7 @@ def get_tile(x, y):
 
 def place_building(x, y, building):
     if grid[y][x] is None:
-        grid[x][y] = building
+        grid[y][x] = building
 
 # Checking if it works
 for row in grid:
@@ -18,33 +18,41 @@ for row in grid:
 
 
 # BUILDINGS AND THEIR EFFECTS
-class Building:
-    def __init__(self, name, cost, income=0, happiness=0):
+class Zone:
+    def __init__(self, name, income=0, happiness=0.0):
         self.name = name
-        self.cost = cost
         self.income = income
         self.happiness = happiness
 
 # House characteristics
-class House(Building):
+class House(Zone):
     def __init__(self):
-        super().__init__('House', cost=1000, happiness=1)
+        super().__init__('House', happiness=0.1)
+
+class Store(Zone):
+    def __init__(self):
+        super().__init__('Store', income=15, happiness=0.1)
 
 # Factory characteristics
-class Factory(Building):
+class Factory(Zone):
     def __init__(self):
-        super().__init__('Factory', cost=3000, income=50, happiness=-2)
+        super().__init__('Factory', income=30, happiness=-0.2)
 
 
 
 
 # The process of buying and placing a building
-def try_placing_building(x, y, building_type):
+def try_placing_zone(x, y, zone_type):
     global city_money, city_happiness
-    building = building_type()
-    if grid[y][x] is None and city_money >= building.cost:
-        grid[y][x] = building
-        city_money -= building.cost
+    print(f"TRY placing a zone at {x}, {y}")
+    zone = zone_type()
+
+    if grid[y][x] is None:
+        print("✅ Conditions met — placing a zone")
+        grid[y][x] = zone
+        return True
+    print(f"❌ Conditions failed — grid[{x},{y}]={grid[y][x]}")
+    return False
 
 # RESOURCES AND TIME UPDATES
 # We will be running it through on_update() function every second.
@@ -57,20 +65,25 @@ def update_city():
             if tile is not None:
                 # then it gives income and happiness
                 city_money += tile.income
-                city_happiness += tile.happiness
+                if city_happiness + tile.happiness > 100:
+                    city_happiness = 100
+                elif city_happiness + tile.happiness <= 0:
+                    city_happiness = 0
+                else:
+                    city_happiness += tile.happiness
 
 #GAME STATE MANAGEMENT
 game_state = ''
 
 
 # Testing
-print(city_money)
-try_placing_building(3, 3, Factory)
-try_placing_building(3, 4, House)
-print(city_money)
-print(city_happiness)
-update_city()
-print(city_money)
-print(city_happiness)
-for row in grid:
-    print(row)
+#print(city_money)
+#try_placing_building(3, 3, Factory)
+#try_placing_building(3, 4, House)
+#print(city_money)
+#print(city_happiness)
+#update_city()
+#print(city_money)
+#print(city_happiness)
+#for row in grid:
+    #print(row)
