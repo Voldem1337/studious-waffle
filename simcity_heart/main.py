@@ -5,7 +5,7 @@ import logic
 import time
 
 # window = arcade.Window(fullscreen= True, title="SimCity Heart")
-window = arcade.Window( title="SimCity", width=1920, height=1080 )
+window = arcade.Window(fullscreen=True, title='SimCity')
 window.center_window()
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
