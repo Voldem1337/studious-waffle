@@ -8,6 +8,9 @@ window.center_window()
 class MainView(arcade.View):
     def __init__(self):
         super().__init__()
+        img1 = 'assets/images/Loading.png'
+        self.bc = arcade.load_texture(img1)
+
         #getting variables
         self.img_list = arcade.SpriteList()
         self.window_width, self.window_height = window.get_size()
@@ -18,7 +21,10 @@ class MainView(arcade.View):
         #music loop
         # self.music = arcade.Sound('assets/music/Menu_music.mp3')
         # self.music.play(loop=True)
+        self.bc.width = self.window_width
+        self.bc.height = self.window_height
         self.img_list.append(self.menu_bar)
+
 
         self.menu_bar_left = self.window_middle_x - 155
         self.menu_bar_right = self.window_middle_x + 135
@@ -33,6 +39,12 @@ class MainView(arcade.View):
         }
         #For exit button
         self.show_confirm = False
+        self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
+                                 20, anchor_x="center")
+        self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
+                               anchor_x="center", anchor_y="center")
+        self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
+                              anchor_x="center", anchor_y="center")
 
 
 
@@ -40,18 +52,19 @@ class MainView(arcade.View):
     def on_draw(self) -> None:
         self.clear()
         self.img_list.draw()
+
+
         #exit window creation
         if self.show_confirm:
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 150))
             arcade.draw_lbwh_rectangle_filled(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.LIGHT_GRAY)  # само окно
             arcade.draw_lbwh_rectangle_outline(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.WHITE, 3)
+            self.label.draw()
+            self.yes.draw()
+            self.no.draw()
 
-            arcade.draw_text("Are you sure?",
-                             self.window_middle_x, self.window_middle_y+100, arcade.color.BLACK, 20, anchor_x="center")
-            arcade.draw_text("[YES]", self.window_middle_x-100, self.window_middle_y, arcade.color.RED, 20, anchor_x="center", anchor_y="center")
-            arcade.draw_text("[NO]", self.window_middle_x+100, self.window_middle_y, arcade.color.DARK_GREEN, 20, anchor_x="center", anchor_y="center")
-            arcade.draw_lbwh_rectangle_outline()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> bool | None:
+
         #defining what button is pressed
         if not self.show_confirm:
             for name, b in self.buttons.items():
@@ -66,6 +79,13 @@ class MainView(arcade.View):
                         self.show_confirm = True
                     break
         if self.show_confirm:
+            if self.window_middle_x-138 <= x <= self.window_middle_x-35 and self.window_middle_y-25 <= y <= self.window_middle_y+24:
+                    arcade.exit()
+            elif self.window_middle_x+74 <= x <= self.window_middle_x+128 and self.window_middle_y-25 <= y <= self.window_middle_y+24:
+                self.show_confirm = False
+                self.clear()
+
+
 
 
 
@@ -92,7 +112,7 @@ class Loading_screen(arcade.View):
         self.bar_height = 25
         self.bar_y = screen_height / 2 -50
 
-        #da
+        #bc and progress bar
         self.image_folder = "assets/images"
         self.files = os.listdir(self.image_folder)
         self.total_files = len(self.files)
@@ -100,7 +120,8 @@ class Loading_screen(arcade.View):
         self.progress = 0
         self.textures = []
 
-    #drawing sprite(image)
+
+    #drawing sprite(image) and bar
     def on_draw(self) -> None:
         # creating picture
         self.clear()
@@ -109,17 +130,17 @@ class Loading_screen(arcade.View):
         # creating loading bar
         bar_x = window.width / 2 - 100
 
-        # рисуем рамку бара
+        # bar outline
         arcade.draw_lbwh_rectangle_outline(
             bar_x, self.bar_y,
             self.bar_width, self.bar_height,
             arcade.color.WHITE
         )
 
-        # вычисляем ширину заливки
+        # width
         fill_width = (self.progress / 100) * (self.bar_width -0)
 
-        # вычисляем левый край и центр заливки, чтобы она росла слева направо
+        # calculating bar edges
 
         left_edge_x = bar_x - fill_width /2
         fill_center_x = left_edge_x + fill_width / 2
