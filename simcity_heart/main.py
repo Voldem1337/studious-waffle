@@ -126,28 +126,23 @@ class MainView(arcade.View):
                 self.clear()
 
         elif self.show_settings:
-            # if abs(x - self.window_middle_x - 210) <= 10 * 2 and abs(y - self.window_middle_x - 210) <= 20:
-            #     self.dragging = True
+            if abs(x - self.window_middle_x - 210) <= 10 * 2 and abs(y - self.window_middle_x - 210) <= 20:
+                self.dragging = True
             if  self.window_middle_x-186 <= x <= self.window_middle_x-114 and self.window_middle_y-152 <= y <= self.window_middle_y-131:
                 self.show_settings = False
                 self.clear()
 
 
-    # def on_mouse_release(self, x, y, button, modifiers):
-    #     self.dragging = False
-    #
-    #
-    # def on_mouse_motion(self, x, y, dx, dy):
-    #     if self.dragging:
-    #         left  = self.window_middle_x - 210 -450/2
-    #         right = self.window_middle_x + 210 -450/2
-    #         self.handle_X = max(min(x, right), left)
-    #         self.volume = (self.handle_X - left) / (450)
-    #         pass
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.dragging = False
 
-
-
-
+    def on_mouse_motion(self, x, y, dx, dy):
+        """ Если тянем — обновляем позицию и громкость """
+        if self.dragging:
+            left = self.left_handle_X
+            right = self.left_handle_X + self.slider_width
+            self.handle_X = max(min(x, right), left)
+            self.volume = ((self.handle_X - left) / self.slider_width) * 100
 
 
 class Loading_screen(arcade.View):
