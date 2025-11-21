@@ -13,8 +13,8 @@ def place_building(x, y, building):
         grid[y][x] = building
 
 # Checking if it works
-for row in grid:
-    print(row)
+#     for row in grid:
+#         print(row)
 
 
 # BUILDINGS AND THEIR EFFECTS
