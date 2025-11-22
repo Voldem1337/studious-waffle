@@ -173,7 +173,7 @@ class GameView(arcade.View):
                 self.scene.add_sprite("Zone", sprite)
 
 def main():
-    window = arcade.Window(1920, 1020, "SimCity")
+    window = arcade.Window(1020, 720, "SimCity")
     window.center_window()
     game = GameView()
     window.show_view(game)
