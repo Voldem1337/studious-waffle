@@ -5,6 +5,8 @@ from constants import city_happiness, city_money
 # THE GRID
 grid = [[None for _ in range(10)] for _ in range(10)]
 
+grid.reverse()
+
 #ROADS
 class Road:
     def __init__(self, name, income=0, happiness=0.0):
@@ -23,17 +25,18 @@ class Water:
         self.income = income
         self.happiness = happiness
 
+#TREES
+class Tree:
+    def __init__(self, name='Tree', income=0, happiness=0.0):
+        self.name = name
+        self.income = income
+        self.happiness = happiness
+
 #Drawing the starting location
 for y in range(len(grid)):
     for x in range(4, 6):
         grid[y][x] = BigRoad()
 
-#grid[7][9] = Water()
-#grid[7][8] = Water()
-#grid[7][7] = Water()
-#grid[6][9] = Water()
-#grid[6][8] = Water()
-#grid[6][7] = Water()
 grid[7][9] = Water()
 grid[7][8] = Water()
 grid[7][7] = Water()
@@ -44,8 +47,9 @@ grid[5][9] = Water()
 grid[5][8] = Water()
 grid[5][7] = Water()
 
+
 # Reversing the grid so that the y coordinate would be measured from the bottom. (Since it's matrix the y coordinates were measured from the top before)
-grid.reverse()
+
 
 
 #for row in grid:
