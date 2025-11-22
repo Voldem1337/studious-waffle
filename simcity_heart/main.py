@@ -73,7 +73,7 @@ class GameView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
-            window.show_view(MainView())
+            window.close()
 
         # Picking a zone through pressing on keyboard
         if symbol == arcade.key.H:
@@ -83,7 +83,12 @@ class GameView(arcade.View):
         elif symbol == arcade.key.F:
             self.picked_zone = self.factory
 
-
+    def on_update(self, delta_time: float):
+        # Money and Happiness update every 15 seconds
+        if time.time() - self.last_update_time > 1:
+            logic.update_city()
+            print('Money:', logic.city_money, 'Happiness:', logic.city_happiness)
+            self.last_update_time = time.time()
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
         if button != arcade.MOUSE_BUTTON_LEFT:
@@ -94,7 +99,12 @@ class GameView(arcade.View):
         grid_y = int((y - self.offset_y) // tile_size)
 
         # Restriction for building on roads, water, etc
-
+        if (grid_x, grid_y) in self.road_cells:
+            print("Cannot build on roads!")
+            return
+        if (grid_x, grid_y) in self.water_cells:
+            print("Cannot build on water!")
+            return
         if (grid_x, grid_y) in self.tree_cells:
             print("Cannot build on trees!")
             return
@@ -121,12 +131,6 @@ class GameView(arcade.View):
             sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
             self.scene.add_sprite("Zone", sprite)
 
-    def on_update(self, delta_time: float):
-        # Money and Happiness update every second
-        if time.time() - self.last_update_time > 1:
-            logic.update_city()
-            print('Money:', logic.city_money, 'Happiness:', round(logic.city_happiness, 2))
-            self.last_update_time = time.time()
 
 
 class MainView(arcade.View):
