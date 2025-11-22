@@ -4,8 +4,6 @@ import logic
 import time
 
 # window = arcade.Window(fullscreen=True, title='SimCity')
-
-
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
 
@@ -40,12 +38,6 @@ class GameView(arcade.View):
         self.store = 'Store'
         self.factory = 'Factory'
 
-        #Road, Grass, Water, Trees...
-        self.road_cells = set()
-        self.grass_cells = set()
-        self.water_cells = set()
-        self.tree_cells = set()
-
         #Settings button
         # Список спрайтов для удобства
         self.ui_sprites = arcade.SpriteList()
@@ -70,21 +62,6 @@ class GameView(arcade.View):
                               anchor_x="center", anchor_y="center")
         self.settings = arcade.Text("SETTINGS",self.window_middle_x, self.window_middle_y+250, arcade.color.WHITE,35, anchor_x="center")
 
-
-
-        def layer_position(layer_name, cells):
-            tile_size = tile_map.tile_width * tile_map.scaling
-
-            # Loop through the tiles in the "Road" and "Grass" layers
-            for sprite in tile_map.sprite_lists.get(layer_name, []):
-                grid_x = int((sprite.center_x - self.offset_x) // tile_size)
-                grid_y = int((sprite.center_y - self.offset_y) // tile_size)
-                cells.add((grid_x, grid_y))
-
-        layer_position('Road', self.road_cells)
-        layer_position('Grass', self.grass_cells)
-        layer_position('Water', self.water_cells)
-        layer_position('Tree', self.tree_cells)
 
     def on_draw(self) -> None:
         self.clear()
@@ -138,17 +115,6 @@ class GameView(arcade.View):
             tile_size = 16 * 3  # base tile size × scaling
             grid_x = int((x - self.offset_x) // tile_size)
             grid_y = int((y - self.offset_y) // tile_size)
-
-            # Restriction for building on roads, water, etc
-            if (grid_x, grid_y) in self.road_cells:
-                print("Cannot build on roads!")
-                return
-            if (grid_x, grid_y) in self.water_cells:
-                print("Cannot build on water!")
-                return
-            if (grid_x, grid_y) in self.tree_cells:
-                print("Cannot build on trees!")
-                return
 
 
             # Check bounds before placing
