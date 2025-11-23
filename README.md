@@ -55,7 +55,7 @@ class Building:
         self.happiness_effect = happiness_effect
 Add basic building types:
 House → increases population, low cost.
-Factory → generates income, decreases happiness.
+FactoryZone → generates income, decreases happiness.
 Park → increases happiness.
 Link each building with an image from /assets.
 💰 4. Economy & Simulation Logic (3–4 hours)
@@ -82,7 +82,7 @@ Happiness adjustments.
 Show player stats and add control buttons.
 Features:
 Display current money, population, happiness.
-Buttons: “Build House”, “Build Factory”, “Build Park”.
+Buttons: “Build House”, “Build FactoryZone”, “Build Park”.
 “Next Turn” or automatic updates via on_update().
 💡 Use arcade.gui.UIFlatButton or simple draw_text() labels.
 💾 6. Save & Load System (2 hours)
@@ -107,7 +107,7 @@ Happiness trends.
 🎯 Goal:
 Make the city feel alive.
 Each turn (week): simulate population growth, pollution, or migration.
-Random events: “Factory breakdown”, “Energy shortage”, “Festival increases happiness”.
+Random events: “FactoryZone breakdown”, “Energy shortage”, “Festival increases happiness”.
 Time system: day/week/month progression.
 🎨 9. Polish & Testing (2–3 hours)
 🎯 Goal:
