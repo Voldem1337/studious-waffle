@@ -38,11 +38,18 @@ class GameView(arcade.View):
         self.store = 'Store'
         self.factory = 'Factory'
 
-        #Settings button
-        # Список спрайтов для удобства
-        self.ui_sprites = arcade.SpriteList()
+        #warning sign
+        self.warning_list = arcade.SpriteList()
+        self.warning_sprite = arcade.Sprite("assets/images/warning_bulding.png", scale=0.25)
+        self.warning_sprite.center_x = self.window.width / 2
+        self.warning_sprite.center_y = self.window.height / 2
+        self.warning_list.append(self.warning_sprite)
 
-        # Загружаем шестерёнку
+        self.show_warning = False
+
+        #Settings button
+
+        self.ui_sprites = arcade.SpriteList()
         self.window_middle_x, self.window_middle_y = self.window.width / 2, self.window.height / 2
         self.settings_gear = arcade.Sprite(
             "assets/images/setting_bt.png",
@@ -78,7 +85,8 @@ class GameView(arcade.View):
             self.label.draw()
             self.yes.draw()
             self.no.draw()
-
+        if self.show_warning:
+            self.warning_list.draw()
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
@@ -98,6 +106,8 @@ class GameView(arcade.View):
             logic.update_city()
             print('Money:', logic.city_money, 'Happiness:', logic.city_happiness)
             self.last_update_time = time.time()
+        if self.show_warning and time.time() - self.warning_timer > 2:
+            self.show_warning = False
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
         if button != arcade.MOUSE_BUTTON_LEFT:
@@ -137,6 +147,10 @@ class GameView(arcade.View):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
                 self.scene.add_sprite("Zone", sprite)
+            else:
+                self.show_warning = True
+                self.warning_timer = time.time()
+
 
 def main():
     window = arcade.Window(1020, 720, "SimCity")
