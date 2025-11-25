@@ -77,6 +77,13 @@ class GameView(arcade.View):
         arcade.draw_text(f"Happiness: {int(logic.city_happiness)}", 20, 50, arcade.color.WHITE, 20)
         arcade.draw_text(f"Selected: {self.picked_zone if self.picked_zone else 'None'}",
                          20, 80, arcade.color.WHITE, 20)
+        arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
+
+        # Demand
+        arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
+        arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.GREEN, 20)
+        arcade.draw_text(f"{round(logic.commercial_demand, 2)}", self.window_width - 80, 50, arcade.color.BLUE, 20)
+        arcade.draw_text(f"{round(logic.industrial_demand, 2)}", self.window_width - 80, 80, arcade.color.YELLOW, 20)
         self.ui_sprites.draw()
         if self.show_settings:
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 200))
@@ -102,6 +109,7 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time: float):
         # Money and Happiness update every 15 seconds
+
         if time.time() - self.last_update_time > 1:
             logic.update_city()
             print('Money:', logic.city_money, 'Happiness:', logic.city_happiness)
@@ -133,14 +141,13 @@ class GameView(arcade.View):
 
 
             if self.picked_zone == self.house:
-                zone_type = logic.House
+                zone_type = logic.Residential
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=3)
             elif self.picked_zone == self.store:
-                zone_type = logic.Store
+                zone_type = logic.Commercial
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
             elif self.picked_zone == self.factory:
-                zone_type = logic.Factory
-                #sprite = arcade.Sprite(':my-assets:maps/Tiles/tile_0079.png', scale=3)
+                zone_type = logic.Industrial
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
             # Try placing the building in logic
             if logic.try_placing_zone(grid_x, grid_y, zone_type):

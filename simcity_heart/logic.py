@@ -151,16 +151,16 @@ class Factory(Building):
 
 
 # The process of buying and placing a building
-# def try_placing_zone(x, y, zone_type):
-#     print(f"TRY placing a zone at {x}, {y}")
-#     zone = zone_type()
-#
-#     if grid[y][x] is None:
-#         print(f"✅ Conditions met — placing a {zone.name}")
-#         grid[y][x] = zone
-#         return True
-#     print(f"❌ Conditions failed — grid[{x},{y}]={grid[y][x]}")
-#     return False
+def try_placing_zone(x, y, zone_type):
+    print(f"TRY placing a zone at {x}, {y}")
+    zone = zone_type()
+
+    if grid[y][x] is None:
+        print(f"✅ Conditions met — placing a {zone.name}")
+        grid[y][x] = zone
+        return True
+    print(f"❌ Conditions failed — grid[{x},{y}]={grid[y][x]}")
+    return False
 '''
 def try_building_in_zone(x, y):
     global house_count, store_count, factory_count,\
