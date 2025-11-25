@@ -131,36 +131,39 @@ class House(Building):
         super().__init__('House', 0, happiness=0.01, population=random.randint(7, 10))
 
         # Building takes time
-        self.build_time = 10 # 10 seconds to build
+        self.build_time = 1 # 10 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Store(Building):
     def __init__(self):
         super().__init__('Store', income=random.randint(12, 18), happiness=0.05, open_positions=random.randint(3, 10))
-        self.build_time = 15  # 15 seconds to build
+        self.build_time = 3  # 15 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Factory(Building):
     def __init__(self):
         super().__init__('Factory', income=random.randint(25, 35), happiness=0.0, open_positions=random.randint(8, 20))
-        self.build_time = 30  # 30 seconds to build
+        self.build_time = 4  # 30 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 
-# The process of buying and placing a building
-def try_placing_zone(x, y, zone_type):
+# The process of placing a placeable
+def try_placing(x, y, placeable):
     print(f"TRY placing a zone at {x}, {y}")
-    zone = zone_type()
+    placeable = placeable()
 
     if grid[y][x] is None:
-        print(f"✅ Conditions met — placing a {zone.name}")
-        grid[y][x] = zone
+        print(f"✅ Conditions met — placing a {placeable.name}")
+        grid[y][x] = placeable
         return True
     print(f"❌ Conditions failed — grid[{x},{y}]={grid[y][x]}")
     return False
+
+
+
 '''
 def try_building_in_zone(x, y):
     global house_count, store_count, factory_count,\
