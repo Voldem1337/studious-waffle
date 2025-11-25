@@ -38,11 +38,18 @@ class GameView(arcade.View):
         self.store = 'Store'
         self.factory = 'Factory'
 
-        #Settings button
-        # Список спрайтов для удобства
-        self.ui_sprites = arcade.SpriteList()
+        #warning sign
+        self.warning_list = arcade.SpriteList()
+        self.warning_sprite = arcade.Sprite("assets/images/warning_bulding.png", scale=0.25)
+        self.warning_sprite.center_x = self.window.width / 2
+        self.warning_sprite.center_y = self.window.height / 2
+        self.warning_list.append(self.warning_sprite)
 
-        # Загружаем шестерёнку
+        self.show_warning = False
+
+        #Settings button
+
+        self.ui_sprites = arcade.SpriteList()
         self.window_middle_x, self.window_middle_y = self.window.width / 2, self.window.height / 2
         self.settings_gear = arcade.Sprite(
             "assets/images/setting_bt.png",
@@ -72,7 +79,7 @@ class GameView(arcade.View):
                          20, 80, arcade.color.WHITE, 20)
         arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
 
-        #Demand
+        # Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
         arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.GREEN, 20)
         arcade.draw_text(f"{round(logic.commercial_demand, 2)}", self.window_width - 80, 50, arcade.color.BLUE, 20)
@@ -85,7 +92,8 @@ class GameView(arcade.View):
             self.label.draw()
             self.yes.draw()
             self.no.draw()
-
+        if self.show_warning:
+            self.warning_list.draw()
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
@@ -99,6 +107,16 @@ class GameView(arcade.View):
         elif symbol == arcade.key.F:
             self.picked_zone = self.factory
 
+    def on_update(self, delta_time: float):
+        # Money and Happiness update every 15 seconds
+        logic.update_construction(delta_time)
+
+        if time.time() - self.last_update_time > 1:
+            logic.update_city()
+            self.last_update_time = time.time()
+        #warning button for 2 seconds
+        if self.show_warning and time.time() - self.warning_timer > 2:
+            self.show_warning = False
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
         if button != arcade.MOUSE_BUTTON_LEFT:
@@ -112,9 +130,6 @@ class GameView(arcade.View):
         else:
             if self.settings_gear.collides_with_point((x, y)):
                 self.show_settings = True
-
-
-            # Placing a zone
 
             tile_size = 16 * 3  # base tile size × scaling
             grid_x = int((x - self.offset_x) // tile_size)
@@ -134,26 +149,19 @@ class GameView(arcade.View):
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
             elif self.picked_zone == self.factory:
                 zone_type = logic.Industrial
-                #sprite = arcade.Sprite(':my-assets:maps/Tiles/tile_0079.png', scale=3)
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
             # Try placing the building in logic
             if logic.try_placing_zone(grid_x, grid_y, zone_type):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
-                self.scene.add_sprite('Zone', sprite)
-
-
-    def on_update(self, delta_time: float):
-        # Money and Happiness update every second
-        logic.update_construction(delta_time)
-        if time.time() - self.last_update_time > 1:
-            logic.update_city()
-            self.last_update_time = time.time()
-
+                self.scene.add_sprite("Zone", sprite)
+            else:
+                self.show_warning = True
+                self.warning_timer = time.time()
 
 
 def main():
-    window = arcade.Window(fullscreen=True, title="SimCity")
+    window = arcade.Window(1020, 720, "SimCity")
     window.center_window()
     game = GameView()
     window.show_view(game)
