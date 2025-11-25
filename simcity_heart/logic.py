@@ -131,21 +131,21 @@ class House(Building):
         super().__init__('House', 0, happiness=0.01, population=random.randint(7, 10))
 
         # Building takes time
-        self.build_time = 10 # 10 seconds to build
+        self.build_time = 1 # 10 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Store(Building):
     def __init__(self):
         super().__init__('Store', income=random.randint(12, 18), happiness=0.05, open_positions=random.randint(3, 10))
-        self.build_time = 15  # 15 seconds to build
+        self.build_time = 3  # 15 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Factory(Building):
     def __init__(self):
         super().__init__('Factory', income=random.randint(25, 35), happiness=0.0, open_positions=random.randint(8, 20))
-        self.build_time = 30  # 30 seconds to build
+        self.build_time = 4  # 30 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
