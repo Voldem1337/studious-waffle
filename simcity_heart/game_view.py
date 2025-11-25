@@ -41,6 +41,15 @@ class GameView(arcade.View):
         #Settings button
         # Список спрайтов для удобства
         self.ui_sprites = arcade.SpriteList()
+        #warning sign
+        self.warning_list = arcade.SpriteList()
+        self.warning_sprite = arcade.Sprite("assets/images/warning_bulding.png", scale=0.25)
+        self.warning_sprite.center_x = self.window.width / 2
+        self.warning_sprite.center_y = self.window.height / 2
+        self.warning_list.append(self.warning_sprite)
+
+
+        self.show_warning = False
 
         # Загружаем шестерёнку
         self.window_middle_x, self.window_middle_y = self.window.width / 2, self.window.height / 2
@@ -85,6 +94,9 @@ class GameView(arcade.View):
             self.label.draw()
             self.yes.draw()
             self.no.draw()
+        if self.show_warning:
+            self.warning_list.draw()
+
 
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
@@ -141,6 +153,9 @@ class GameView(arcade.View):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
                 self.scene.add_sprite('Zone', sprite)
+            else:
+                self.show_warning = True
+                self.warning_timer = time.time()
 
 
     def on_update(self, delta_time: float):
@@ -149,11 +164,15 @@ class GameView(arcade.View):
         if time.time() - self.last_update_time > 1:
             logic.update_city()
             self.last_update_time = time.time()
+        if self.show_warning and time.time() - self.warning_timer > 2:
+            self.show_warning = False
 
 
 
 def main():
-    window = arcade.Window(fullscreen=True, title="SimCity")
+    # window = arcade.Window(fullscreen=True, title="SimCity")
+    window = arcade.Window(width=1080, height=720, title="SimCity")
+
     window.center_window()
     game = GameView()
     window.show_view(game)
