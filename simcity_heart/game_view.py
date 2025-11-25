@@ -153,8 +153,7 @@ class GameView(arcade.View):
 
 
 def main():
-    # window = arcade.Window(fullscreen=True, title="SimCity")
-    window = arcade.Window(width=800, height=600, title="SimCity Heart")
+    window = arcade.Window(fullscreen=True, title="SimCity")
     window.center_window()
     game = GameView()
     window.show_view(game)
