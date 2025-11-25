@@ -109,11 +109,12 @@ class GameView(arcade.View):
 
     def on_update(self, delta_time: float):
         # Money and Happiness update every 15 seconds
+        logic.update_construction(delta_time)
 
         if time.time() - self.last_update_time > 1:
             logic.update_city()
-            print('Money:', logic.city_money, 'Happiness:', logic.city_happiness)
             self.last_update_time = time.time()
+        #warning button for 2 seconds
         if self.show_warning and time.time() - self.warning_timer > 2:
             self.show_warning = False
 
