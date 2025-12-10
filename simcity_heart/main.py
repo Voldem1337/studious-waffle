@@ -5,34 +5,33 @@ import logic
 import time
 
 # window = arcade.Window(fullscreen= True, title="SimCity Heart")
-window = arcade.Window(fullscreen=True, title='SimCity')
+window = arcade.Window(height=720, width=1280, title='SimCity')
 window.center_window()
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
 
 
 class MainView(arcade.View):
-    def __init__(self):
+    def __init__(self,music_player,  window_middle_x, window_middle_y):
+
         super().__init__()
+        self.window_middle_x = window_middle_x
+        self.window_middle_y = window_middle_y
+        self.music_player = music_player
         #adding bc
         img1 = 'assets/images/Loading.png'
         self.bc = arcade.Sprite(img1)
 
-
         #getting variables
         self.img_list = arcade.SpriteList()
         self.window_width, self.window_height = window.get_size()
-        self.window_middle_x, self.window_middle_y = window.width /2, window.height /2
 
 
+        self.left_handle_X = self.window_middle_x - 200
+        self.handle_X = self.left_handle_X + 350 * (volume / 100)
         #path
         self.menu_bar = arcade.Sprite('assets/images/menu_bars.png', scale=0.5)
         self.menu_bar.position = (self.window_middle_x, self.window_middle_y)
-
-
-        #music loop
-        self.music = arcade.Sound('assets/music/Menu_music.mp3')
-        self.music.play(volume = 0.5, loop = True)
 
         #variables
         self.bc.width = self.window_width
@@ -46,9 +45,7 @@ class MainView(arcade.View):
         self.button_width = 300
         self.button_height = 74
 
-        #global volume
-        global volume
-        volume = 50
+
 
 
         #button position
@@ -64,19 +61,43 @@ class MainView(arcade.View):
         self.show_confirm = False
         self.show_settings = False
         self.dragging = False
-        self.left_handle_X = self.window_middle_x - 200
-        self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
-                                 20, anchor_x="center")
-        self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
-                               anchor_x="center", anchor_y="center")
-        self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
-                              anchor_x="center", anchor_y="center")
+
+
+
+        # self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
+        #                          20, anchor_x="center")
+        # self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
+        #                        anchor_x="center", anchor_y="center")
+        # self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
+        #                       anchor_x="center", anchor_y="center")
+
+
+
         self.settings = arcade.Text("SETTINGS",self.window_middle_x, self.window_middle_y+250, arcade.color.WHITE,35, anchor_x="center")
         self.volume =arcade.Text(f"Volume: {volume}%", self.window_middle_x, self.window_middle_y+185,
                          arcade.color.WHITE, 20, anchor_x="center")
         self.back = arcade.Text('BACK', self.window_middle_x-150, self.window_middle_y-150,
                          arcade.color.WHITE, 20, anchor_x="center")
-
+        #For windows modes bars
+        self.resolutions = [
+            ("Fullscreen", None),
+            ("1920x1080", (1920, 1080)),
+            ("1600x900", (1600, 900)),
+            ("1280x720", (1280, 720))
+        ]
+        self.current_resolution_index = 0
+        self.dropdown_open = False
+        self.dropdown_x = self.window_middle_x - 100
+        self.dropdown_y = self.window_middle_y + 50
+        self.dropdown_width = 200
+        self.dropdown_height = 40
+        self.resolution_label = arcade.Text(
+            "Resolution:",
+            self.dropdown_x - 125,
+            self.dropdown_y + 10,
+            arcade.color.WHITE,
+            20
+        )
 
     def on_draw(self) -> None:
         self.clear()
@@ -88,6 +109,13 @@ class MainView(arcade.View):
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 200))
             arcade.draw_lbwh_rectangle_filled(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.DARK_GRAY)
             arcade.draw_lbwh_rectangle_outline(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.WHITE, 3)
+            self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100,
+                                     arcade.color.BLACK,
+                                     20, anchor_x="center")
+            self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
+                                   anchor_x="center", anchor_y="center")
+            self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
+                                  anchor_x="center", anchor_y="center")
             self.label.draw()
             self.yes.draw()
             self.no.draw()
@@ -106,6 +134,68 @@ class MainView(arcade.View):
             self.settings.draw()
             self.volume.draw()
             self.back.draw()
+            self.resolution_label.draw()
+            current_res_name =self.resolutions[self.current_resolution_index][0]
+            arcade.draw_lbwh_rectangle_filled(
+                self.dropdown_x+25,
+                self.dropdown_y,
+                self.dropdown_width,
+                self.dropdown_height,
+                arcade.color.DARK_GRAY
+            )
+            arcade.draw_lbwh_rectangle_outline(
+                self.dropdown_x+25,
+                self.dropdown_y,
+                self.dropdown_width,
+                self.dropdown_height,
+                arcade.color.WHITE,
+                2
+            )
+            arcade.draw_text(
+                current_res_name,
+                self.dropdown_x + 35,
+                self.dropdown_y + 12,
+                arcade.color.WHITE,
+                16
+            )
+            arrow = "▼" if not self.dropdown_open else "▲"
+            arcade.draw_text(
+                arrow,
+                self.dropdown_x + self.dropdown_width - 15,
+                self.dropdown_y + 10,
+                arcade.color.WHITE,
+                18
+            )
+            if self.dropdown_open:
+                for i, (res_name, res_value) in enumerate(self.resolutions):
+                    option_y = self.dropdown_y - (i + 1) * self.dropdown_height
+
+
+                    bg_color = arcade.color.GRAY if i == self.current_resolution_index else arcade.color.DARK_GRAY
+
+                    arcade.draw_lbwh_rectangle_filled(
+                        self.dropdown_x+25,
+                        option_y,
+                        self.dropdown_width,
+                        self.dropdown_height,
+                        bg_color
+                    )
+                    arcade.draw_lbwh_rectangle_outline(
+                        self.dropdown_x+25,
+                        option_y,
+                        self.dropdown_width,
+                        self.dropdown_height,
+                        arcade.color.WHITE,
+                        2
+                    )
+
+                    arcade.draw_text(
+                        res_name,
+                        self.dropdown_x + 35,
+                        option_y + 12,
+                        arcade.color.WHITE,
+                        16
+                    )
 
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> bool | None:
         #defining what button is pressed
@@ -132,26 +222,111 @@ class MainView(arcade.View):
                 self.show_confirm = False
                 self.clear()
 
+
         elif self.show_settings:
-            # if abs(x - self.window_middle_x - 210) <= 10 * 2 and abs(y - self.window_middle_x - 210) <= 20:
-            #     self.dragging = True
-            if  self.window_middle_x-186 <= x <= self.window_middle_x-114 and self.window_middle_y-152 <= y <= self.window_middle_y-131:
+            global volume
+            if abs(x - self.handle_X) <= 15 and abs(y - (self.window_middle_y + 127)) <= 15:
+                self.dragging = True
+            #by selecting at the bar any point volume will change
+            if self.window_middle_x - 200<= x <= self.window_middle_x +150 and self.window_middle_y+ 115<= y <= self.window_middle_y+140:
+                self.handle_X = x
+                volume = int(((self.handle_X - self.left_handle_X) / 350) * 100)
+                self.volume.text = f"Volume: {volume}%"
+                self.music_player.volume = volume / 100
+
+
+
+            if self.window_middle_x - 186 <= x <= self.window_middle_x - 114 and self.window_middle_y - 152 <= y <= self.window_middle_y - 131:
                 self.show_settings = False
+
+                self.clear()
+            if (self.dropdown_x <= x <= self.dropdown_x + self.dropdown_width and
+                    self.dropdown_y <= y <= self.dropdown_y + self.dropdown_height):
+                self.dropdown_open = not self.dropdown_open
+                return
+
+                # dropdown if opened, showing all variants
+            if self.dropdown_open:
+                for i, (res_name, res_value) in enumerate(self.resolutions):
+                    option_y = self.dropdown_y - (i + 1) * self.dropdown_height
+
+                    if (self.dropdown_x <= x <= self.dropdown_x + self.dropdown_width and
+                            option_y <= y <= option_y + self.dropdown_height):
+
+                        #changing resolution
+                        self.current_resolution_index = i
+                        self.dropdown_open = False
+
+                        if res_value is None:  # Fullscreen
+                            self.window.set_fullscreen(True)
+                        else:  #window mode
+                            self.window.set_fullscreen(False)
+                            self.window.set_size(res_value[0], res_value[1])
+                            self.window.center_window()
+
+                        # updating resolution
+                        self.window_width, self.window_height = self.window.get_size()
+                        self.window_middle_x = self.window.width / 2
+                        self.window_middle_y = self.window.height / 2
+
+                        # updating positioning of elements
+                        self._update_ui_positions()
+                        return
+
+                # Volume
+            if abs(x - self.handle_X) <= 15 and abs(y - (self.window_middle_y + 127)) <= 15:
+                self.dragging = True
+
+           #Buttons Back
+            if (self.window_middle_x - 186 <= x <= self.window_middle_x - 114 and
+                    self.window_middle_y - 152 <= y <= self.window_middle_y - 131):
+                self.show_settings = False
+                self.dropdown_open = False
                 self.clear()
 
+    def _update_ui_positions(self):
 
-    # def on_mouse_release(self, x, y, button, modifiers):
-    #     self.dragging = False
-    #
-    #
-    # def on_mouse_motion(self, x, y, dx, dy):
-    #     if self.dragging:
-    #         left  = self.window_middle_x - 210 -450/2
-    #         right = self.window_middle_x + 210 -450/2
-    #         self.handle_X = max(min(x, right), left)
-    #         self.volume = (self.handle_X - left) / (450)
-    #         pass
+        # updating position of x
+        self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2
+        self.settings.x = self.window_middle_x
+        self.settings.y = self.window_middle_y + 250
 
+        self.volume.x = self.window_middle_x
+        self.volume.y = self.window_middle_y + 185
+
+        self.back.x = self.window_middle_x - 150
+        self.back.y = self.window_middle_y - 150
+
+        # Обновляем позицию dropdown
+        self.dropdown_x = self.window_middle_x - 100
+        self.dropdown_y = self.window_middle_y + 50
+
+        self.resolution_label.x = self.dropdown_x - 100
+        self.resolution_label.y = self.dropdown_y + 10
+
+        # Обновляем позицию полоски громкости
+        self.left_handle_X = self.window_middle_x - 200
+        self.handle_X = self.left_handle_X + 350 * (volume / 100)
+
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.dragging = False
+
+    #volume change when draging circle
+    def on_mouse_motion(self, x, y, dx, dy):
+        global volume
+        if self.dragging:
+            left = self.left_handle_X
+            right = self.left_handle_X + 350
+
+            self.handle_X = max(min(x, right), left)
+
+            volume = int(((self.handle_X - left) / 350) * 100)
+
+            self.volume.text = f"Volume: {volume}%"
+
+
+            self.music_player.volume = volume / 100
 
 
 
@@ -160,12 +335,22 @@ class MainView(arcade.View):
 class Loading_screen(arcade.View):
     def __init__(self):
         #intialization picture
+        self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2
         super().__init__()
         img1 = 'assets/images/Loading.png'
         self.bc = arcade.Sprite(
         img1,scale=1
         )
+        # global volume
+        # music loop
+        self.music = arcade.Sound('assets/music/Menu_music.mp3')
+        self.music_player = self.music.play(volume=0.5, loop=True)
+        global volume
+        volume = 50
+        self.left_handle_X = self.window_middle_x - 200
+        self.handle_X = self.left_handle_X + 350 * (volume / 100)
         screen_width, screen_height = window.get_size()
+
 
 
         #positioning
@@ -247,7 +432,7 @@ class Loading_screen(arcade.View):
             self.progress += self.loading_speed * delta_time
         else:
             self.progress = 100
-            main = MainView()
+            main = MainView(self.music_player, self.window_middle_x, self.window_middle_y)
             window.show_view(main)
     # def on_update(self, delta_time):
     #     #
