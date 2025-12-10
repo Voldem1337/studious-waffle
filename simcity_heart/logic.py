@@ -1,17 +1,15 @@
 import random
 
-
-
 # STARTING DATA
 city_money = 10000
 city_happiness = 0
 city_population = 0
-house_count = 0
-store_count = 0
-factory_count = 0
 city_jobs = 0
 
 buildings = []
+house_count = 0
+store_count = 0
+factory_count = 0
 
 residential_demand = 0
 commercial_demand = 0
@@ -151,7 +149,7 @@ class Factory(Building):
 
 
 # The process of placing a placeable
-def try_placing(x, y, placeable):
+def try_placing_placeable(x, y, placeable):
     print(f"TRY placing a zone at {x}, {y}")
     placeable = placeable()
 
@@ -241,7 +239,7 @@ def try_building_in_zone(x, y):
     # --- RESIDENTIAL ---
     if isinstance(zone, Residential):
         # allow early growth OR demand-based growth
-        if house_count < 6 or residential_demand > 0:
+        if store_count < 6 or residential_demand > 0:
             build = True
 
         if build:
@@ -325,7 +323,12 @@ def update_construction(delta_time):
 # We will be running it through on_update() function every second.
 # (So the Buildings will bring income and happiness every second)
 def update_city():
-    global city_money, city_happiness, city_population
+    global city_money, city_happiness, city_population, store_count, house_count, factory_count
+
+    store_count = sum(isinstance(b, Store) for b, _, _ in buildings)
+    house_count = sum(isinstance(b, House) for b, _, _ in buildings)
+    factory_count = sum(isinstance(b, Factory) for b, _, _ in buildings)
+
 
 
     for y in range(len(grid)):

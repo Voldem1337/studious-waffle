@@ -181,7 +181,7 @@ class GameView(arcade.View):
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=3)
 
             # Try placing the building in logic
-            if logic.try_placing(grid_x, grid_y, placeable):
+            if logic.try_placing_placeable(grid_x, grid_y, placeable):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
                 self.scene.add_sprite('Object', sprite)
