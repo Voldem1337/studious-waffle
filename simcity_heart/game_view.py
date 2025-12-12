@@ -15,7 +15,7 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         # Loading the map
-        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=3)
+        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
         self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
         self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
@@ -153,7 +153,7 @@ class GameView(arcade.View):
 
             # Placing a zone
 
-            tile_size = 16 * 3  # base tile size × scaling
+            tile_size = 16 * 2  # base tile size × scaling
             grid_x = int((x - self.offset_x) // tile_size)
             grid_y = int((y - self.offset_y) // tile_size)
 
@@ -165,20 +165,20 @@ class GameView(arcade.View):
 
             if self.picked_placeable == self.house:
                 placeable = logic.Residential
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=3)
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=2)
             elif self.picked_placeable == self.store:
                 placeable = logic.Commercial
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=2)
             elif self.picked_placeable == self.factory:
                 placeable = logic.Industrial
                 #sprite = arcade.Sprite(':my-assets:maps/Tiles/tile_0079.png', scale=3)
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=2)
             elif self.picked_placeable == self.road_types[0]:
                 placeable = logic.VerticalRoad
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=3)
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
             elif self.picked_placeable == self.road_types[1]:
                 placeable = logic.HorizontalRoad
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=3)
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
 
             # Try placing the building in logic
             if logic.try_placing_placeable(grid_x, grid_y, placeable):
@@ -203,7 +203,7 @@ class GameView(arcade.View):
 
 def main():
     # window = arcade.Window(fullscreen=True, title="SimCity")
-    window = arcade.Window(width=1080, height=720, title="SimCity")
+    window = arcade.Window(width=1024, height=768, title="SimCity")
 
     window.center_window()
     game = GameView()

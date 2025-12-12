@@ -20,7 +20,7 @@ industrial_demand = 0
 
 
 # THE GRID
-grid = [[None for _ in range(10)] for _ in range(10)]
+grid = [[None for _ in range(36)] for _ in range(22)]
 
 # Since the y coordinates are measured from the top in matrix, the matrix maps y is reversed compared to
 # the actual game map.
@@ -66,25 +66,27 @@ class Tree(Placeable):
 
 #Drawing the starting location
 for y in range(len(grid)):
-    for x in range(4, 6):
+    for x in range(17, 19):
         grid[y][x] = VerticalRoad()
 
-grid[7][9] = Water()
-grid[7][8] = Water()
-grid[7][7] = Water()
-grid[6][9] = Water()
-grid[6][8] = Water()
-grid[6][7] = Water()
-grid[5][9] = Water()
-grid[5][8] = Water()
-grid[5][7] = Water()
+grid[16][22] = Water()
+grid[16][21] = Water()
+grid[16][20] = Water()
+grid[15][22] = Water()
+grid[15][21] = Water()
+grid[15][20] = Water()
+grid[14][22] = Water()
+grid[14][21] = Water()
+grid[14][20] = Water()
 
-grid[1][0] = Tree()
-grid[2][1] = Tree()
-grid[7][2] = Tree()
-grid[1][8] = Tree()
-grid[8][8] = Tree()
-grid[8][9] = Tree()
+grid[10][13] = Tree()
+grid[11][14] = Tree()
+grid[16][15] = Tree()
+grid[10][21] = Tree()
+grid[17][21] = Tree()
+grid[17][22] = Tree()
+
+
 
 
 for row in grid:
@@ -239,7 +241,7 @@ def try_building_in_zone(x, y):
     # --- RESIDENTIAL ---
     if isinstance(zone, Residential):
         # allow early growth OR demand-based growth
-        if store_count < 6 or residential_demand > 0:
+        if house_count < 6 or residential_demand > 0:
             build = True
 
         if build:
@@ -312,6 +314,7 @@ def update_construction(delta_time):
     for building, x, y in buildings:
         if not building.built:
             building.remaining_time -= delta_time
+            building_animation = True
 
             if building.remaining_time <= 0:
                 building.built = True
