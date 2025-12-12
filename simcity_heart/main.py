@@ -1,8 +1,8 @@
 import arcade
 import os
 from pathlib import Path
-import logic
-import time
+import save_load
+from game_view import GameView
 
 # window = arcade.Window(fullscreen= True, title="SimCity Heart")
 window = arcade.Window(height=720, width=1280, title='SimCity')
@@ -197,11 +197,18 @@ class MainView(arcade.View):
             for name, b in self.buttons.items():
                 if x >=b['x'] and x <= b['x'] + b['w'] and y >= b['y'] and y<= b['y'] + b['h']:
                     if name == "New Game":
-                        print("New Game")
-                    elif name == "Load Game":
-                        from game_view import GameView
                         game = GameView()
                         self.window.show_view(game)
+                    elif name == "Load Game":
+                        if save_load.load_game(slot_number=1):
+                            game = GameView()
+                            game.rebuild_scene_from_logic()
+                            self.window.show_view(game)
+
+                        else:
+                            print("Game not loaded")
+
+
                     elif name == "Settings":
                         self.show_settings = True
                     elif name == "Exit":
@@ -409,7 +416,7 @@ class Loading_screen(arcade.View):
 
 
         # creating loading bar
-        bar_x = window.width / 2 - 100
+        bar_x = window.width / 2 - 200
 
 
         # bar outline
@@ -467,7 +474,7 @@ class Loading_screen(arcade.View):
     #         # calculating procent
     #         self.progress = (self.loaded_files / self.total_files) * 100
     #     else:
-    #         main = MainView()
+    #         main = MainView(self.music_player)
     #         window.show_view(main)
     #         print("All files are ready")
 
