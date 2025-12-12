@@ -12,11 +12,10 @@ arcade.resources.add_resource_handle('my-assets', assets_path)
 
 
 class MainView(arcade.View):
-    def __init__(self,music_player,  window_middle_x, window_middle_y):
+    def __init__(self,music_player):
 
         super().__init__()
-        self.window_middle_x = window_middle_x
-        self.window_middle_y = window_middle_y
+
         self.music_player = music_player
         #adding bc
         img1 = 'assets/images/Loading.png'
@@ -25,6 +24,8 @@ class MainView(arcade.View):
         #getting variables
         self.img_list = arcade.SpriteList()
         self.window_width, self.window_height = window.get_size()
+        self.window_middle_x = self.window_width / 2
+        self.window_middle_y = self.window_height / 2
 
 
         self.left_handle_X = self.window_middle_x - 200
@@ -64,12 +65,12 @@ class MainView(arcade.View):
 
 
 
-        # self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
-        #                          20, anchor_x="center")
-        # self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
-        #                        anchor_x="center", anchor_y="center")
-        # self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
-        #                       anchor_x="center", anchor_y="center")
+        self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
+                                 20, anchor_x="center")
+        self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
+                               anchor_x="center", anchor_y="center")
+        self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
+                              anchor_x="center", anchor_y="center")
 
 
 
@@ -78,6 +79,7 @@ class MainView(arcade.View):
                          arcade.color.WHITE, 20, anchor_x="center")
         self.back = arcade.Text('BACK', self.window_middle_x-150, self.window_middle_y-150,
                          arcade.color.WHITE, 20, anchor_x="center")
+
         #For windows modes bars
         self.resolutions = [
             ("Fullscreen", None),
@@ -87,13 +89,13 @@ class MainView(arcade.View):
         ]
         self.current_resolution_index = 0
         self.dropdown_open = False
-        self.dropdown_x = self.window_middle_x - 100
+        self.dropdown_x = self.window_middle_x
         self.dropdown_y = self.window_middle_y + 50
         self.dropdown_width = 200
         self.dropdown_height = 40
         self.resolution_label = arcade.Text(
             "Resolution:",
-            self.dropdown_x - 125,
+            self.dropdown_x - 200,
             self.dropdown_y + 10,
             arcade.color.WHITE,
             20
@@ -109,20 +111,12 @@ class MainView(arcade.View):
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 200))
             arcade.draw_lbwh_rectangle_filled(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.DARK_GRAY)
             arcade.draw_lbwh_rectangle_outline(self.window_middle_x-150, self.window_middle_y-50, 300, 200, arcade.color.WHITE, 3)
-            self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100,
-                                     arcade.color.BLACK,
-                                     20, anchor_x="center")
-            self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
-                                   anchor_x="center", anchor_y="center")
-            self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
-                                  anchor_x="center", anchor_y="center")
             self.label.draw()
             self.yes.draw()
             self.no.draw()
 
         #setting window
         if self.show_settings:
-            self.handle_X = self.left_handle_X + 350 * (volume / 100)
             arcade.draw_lbwh_rectangle_filled(0, 0, self.window_width, self.window_height, (0, 0, 0, 200))
             arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 300, self.window_middle_y - 250, 600, 600,
                                               arcade.color.DARK_GRAY)
@@ -235,7 +229,6 @@ class MainView(arcade.View):
                 self.music_player.volume = volume / 100
 
 
-
             if self.window_middle_x - 186 <= x <= self.window_middle_x - 114 and self.window_middle_y - 152 <= y <= self.window_middle_y - 131:
                 self.show_settings = False
 
@@ -285,28 +278,58 @@ class MainView(arcade.View):
                 self.clear()
 
     def _update_ui_positions(self):
+        """Обновляет позиции ВСЕХ UI элементов после смены разрешения"""
 
-        # updating position of x
-        self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2
+        # Обновляем базовые размеры окна
+        self.window_width, self.window_height = self.window.get_size()
+        self.window_middle_x = self.window.width / 2
+        self.window_middle_y = self.window.height / 2
+        # Обновляем меню бар
+        self.menu_bar.position = (self.window_middle_x, self.window_middle_y)
+
+        # Обновляем кнопки главного меню
+        self.buttons = {
+            'New Game': {"x": self.window_middle_x - 155, "y": self.window_middle_y + 100, "w": 300, "h": 74},
+            'Load Game': {'x': self.window_middle_x - 155, "y": self.window_middle_y + 5, "w": 300, "h": 74},
+            'Settings': {'x': self.window_middle_x - 155, 'y': self.window_middle_y - 85, 'w': 300, 'h': 74},
+            'Exit': {'x': self.window_middle_x - 155, 'y': self.window_middle_y - 175, 'w': 300, 'h': 74}
+        }
+        # === ОБНОВЛЯЕМ ФОН (КРИТИЧНО!) ===
+        self.bc.width = self.window_width
+        self.bc.height = self.window_height
+        self.bc.center_x = self.window_middle_x
+        self.bc.center_y = self.window_middle_y
+
+        # === ОБНОВЛЯЕМ ОКНО ПОДТВЕРЖДЕНИЯ ВЫХОДА ===
+        self.label.x = self.window_middle_x
+        self.label.y = self.window_middle_y + 100
+        self.yes.x = self.window_middle_x - 100
+        self.yes.y = self.window_middle_y
+        self.no.x = self.window_middle_x + 100
+        self.no.y = self.window_middle_y
+
+        # === ОБНОВЛЯЕМ НАСТРОЙКИ ===
         self.settings.x = self.window_middle_x
         self.settings.y = self.window_middle_y + 250
 
         self.volume.x = self.window_middle_x
         self.volume.y = self.window_middle_y + 185
 
-        self.back.x = self.window_middle_x - 150
+        self.back.x = self.window_middle_x - 50
         self.back.y = self.window_middle_y - 150
 
-        # Обновляем позицию dropdown
-        self.dropdown_x = self.window_middle_x - 100
+        # === ОБНОВЛЯЕМ DROPDOWN ===
+        self.dropdown_x = self.window_middle_x + 15
         self.dropdown_y = self.window_middle_y + 50
 
-        self.resolution_label.x = self.dropdown_x - 100
+        self.resolution_label.x = self.dropdown_x -215
         self.resolution_label.y = self.dropdown_y + 10
 
-        # Обновляем позицию полоски громкости
+        # === ОБНОВЛЯЕМ ПОЛЗУНОК ГРОМКОСТИ ===
         self.left_handle_X = self.window_middle_x - 200
         self.handle_X = self.left_handle_X + 350 * (volume / 100)
+        self.back = arcade.Text('BACK', self.window_middle_x - 150, self.window_middle_y - 150,
+                                arcade.color.WHITE, 20, anchor_x="center")
 
 
     def on_mouse_release(self, x, y, button, modifiers):
@@ -327,7 +350,6 @@ class MainView(arcade.View):
 
 
             self.music_player.volume = volume / 100
-
 
 
 
@@ -432,7 +454,7 @@ class Loading_screen(arcade.View):
             self.progress += self.loading_speed * delta_time
         else:
             self.progress = 100
-            main = MainView(self.music_player, self.window_middle_x, self.window_middle_y)
+            main = MainView(self.music_player)
             window.show_view(main)
     # def on_update(self, delta_time):
     #     #
