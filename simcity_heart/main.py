@@ -117,6 +117,11 @@ class MainView(arcade.View):
 
         #setting window
         if self.show_settings:
+
+
+
+            
+            #novoje
             arcade.draw_lbwh_rectangle_filled(0, 0, self.window_width, self.window_height, (0, 0, 0, 200))
             arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 300, self.window_middle_y - 250, 600, 600,
                                               arcade.color.DARK_GRAY)
@@ -283,7 +288,7 @@ class MainView(arcade.View):
                 self.show_settings = False
                 self.dropdown_open = False
                 self.clear()
-
+    #novoje
     def _update_ui_positions(self):
         """Обновляет позиции ВСЕХ UI элементов после смены разрешения"""
 

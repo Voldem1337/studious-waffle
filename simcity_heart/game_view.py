@@ -2,6 +2,8 @@ import arcade
 from pathlib import Path
 import logic
 import time
+
+#novoje
 import save_load
 
 # window = arcade.Window(fullscreen=True, title='SimCity')
@@ -164,6 +166,13 @@ class GameView(arcade.View):
                 self.show_warning = True
                 self.warning_timer = time.time()
 
+
+
+
+
+
+
+    #Novaje
     def rebuild_scene_from_logic(self):
         tile_size = 16*3
         tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=3)
