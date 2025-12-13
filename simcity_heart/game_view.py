@@ -1,8 +1,6 @@
 import arcade
 from pathlib import Path
 
-from matplotlib import rcParamsDefault
-
 import logic
 import time
 
@@ -81,6 +79,15 @@ class GameView(arcade.View):
         self.settings = arcade.Text("SETTINGS",self.window_middle_x, self.window_middle_y+250, arcade.color.WHITE,35, anchor_x="center")
 
 
+        self.building_sprites = {}
+        self.construction_texture = arcade.load_texture("assets/maps/Tiles/tile_0012.png")
+
+        self.final_textures = {
+            logic.House: arcade.load_texture("assets/maps/Tiles/tile_0027.png"),
+            logic.Store: arcade.load_texture("assets/maps/Tiles/tile_0046.png"),
+            logic.Factory: arcade.load_texture("assets/maps/Tiles/tile_0083.png"),
+        }
+
     def on_draw(self) -> None:
         self.clear()
         self.scene.draw()
@@ -95,6 +102,8 @@ class GameView(arcade.View):
         arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.GREEN, 20)
         arcade.draw_text(f"{round(logic.commercial_demand, 2)}", self.window_width - 80, 50, arcade.color.BLUE, 20)
         arcade.draw_text(f"{round(logic.industrial_demand, 2)}", self.window_width - 80, 80, arcade.color.YELLOW, 20)
+
+
         self.ui_sprites.draw()
         if self.show_settings:
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 200))
@@ -105,6 +114,8 @@ class GameView(arcade.View):
             self.no.draw()
         if self.show_warning:
             self.warning_list.draw()
+
+
 
 
 
@@ -165,14 +176,14 @@ class GameView(arcade.View):
 
             if self.picked_placeable == self.house:
                 placeable = logic.Residential
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=2)
+                sprite = arcade.Sprite(":my-assets:images/green_zone.png", scale=0.055)
             elif self.picked_placeable == self.store:
                 placeable = logic.Commercial
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=2)
+                sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
             elif self.picked_placeable == self.factory:
                 placeable = logic.Industrial
                 #sprite = arcade.Sprite(':my-assets:maps/Tiles/tile_0079.png', scale=3)
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=2)
+                sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
             elif self.picked_placeable == self.road_types[0]:
                 placeable = logic.VerticalRoad
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
@@ -180,7 +191,7 @@ class GameView(arcade.View):
                 placeable = logic.HorizontalRoad
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
 
-            # Try placing the building in logic
+            # Try placing the placeable in logic
             if logic.try_placing_placeable(grid_x, grid_y, placeable):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
@@ -191,11 +202,30 @@ class GameView(arcade.View):
 
 
     def on_update(self, delta_time: float):
-        # Money and Happiness update every second
-        logic.update_construction(delta_time)
+
         if time.time() - self.last_update_time > 1:
             logic.update_city()
             self.last_update_time = time.time()
+
+        # Money and Happiness update every second
+        finished = logic.update_construction(delta_time)
+
+        for building, x, y in finished:
+            sprite = self.building_sprites[(x, y)]
+            sprite.texture = self.final_textures[type(building)]
+
+        for building, x, y in logic.buildings:
+            if not building.built and (x, y) not in self.building_sprites:
+                tile_size = 16 * 2
+
+                sprite = arcade.Sprite(self.construction_texture, scale=2)
+                sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
+                sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
+
+                self.scene.add_sprite("Object", sprite)
+                self.building_sprites[(x, y)] = sprite
+
+
         if self.show_warning and time.time() - self.warning_timer > 2:
             self.show_warning = False
 

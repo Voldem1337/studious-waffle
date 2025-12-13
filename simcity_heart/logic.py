@@ -131,21 +131,21 @@ class House(Building):
         super().__init__('House', 0, happiness=0.01, population=random.randint(7, 10))
 
         # Building takes time
-        self.build_time = 1 # 10 seconds to build
+        self.build_time = 10 # 10 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Store(Building):
     def __init__(self):
         super().__init__('Store', income=random.randint(12, 18), happiness=0.05, open_positions=random.randint(3, 10))
-        self.build_time = 3  # 15 seconds to build
+        self.build_time = 15  # 15 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
 class Factory(Building):
     def __init__(self):
         super().__init__('Factory', income=random.randint(25, 35), happiness=0.0, open_positions=random.randint(8, 20))
-        self.build_time = 4  # 30 seconds to build
+        self.build_time = 20  # 20 seconds to build
         self.remaining_time = self.build_time
         self.built = False
 
@@ -163,93 +163,21 @@ def try_placing_placeable(x, y, placeable):
     return False
 
 
-
-'''
 def try_building_in_zone(x, y):
-    global house_count, store_count, factory_count,\
-        city_population, city_jobs
-
-    build = False
-
-    # if tile is Residential Zone
-    if isinstance(grid[y][x], Residential):
-        house = House()
-
-        if house_count < 5:
-            build = True
-
-        # if at least half of city population is employed
-        elif employed_population * 2 >= city_population:
-            build = True
-
-        if build:
-            # Place a House in the Residential zone
-            place_building(x, y, house)
-            house_count += 1
-            # Houses give population
-            city_population += house.population
-            unemployed_population += house.population
-
-    # if tile is Commercial Zone
-    elif isinstance(grid[y][x], Commercial):
-        store = Store()
-        if store_count < 3:
-            build = True
-        # if less than third of city is employed
-        elif employed_population * 3 < city_population:
-            build = True
-
-        if build:
-            place_building(x, y, store)
-            store_count += 1
-            city_open_job_positions += store.open_positions
-            if unemployed_population >= city_open_job_positions:
-                city_open_job_positions = 0
-                unemployed_population -= city_open_job_positions
-            else:
-                unemployed_population = 0
-                city_open_job_positions -= unemployed_population
-
-
-    # if tile is Industrial Zone
-    elif isinstance(grid[y][x], Industrial):
-        factory = Factory()
-        if factory_count < 2:
-            build = True
-        # if less than half of city is employed
-        elif employed_population * 2 < city_population:
-            build = True
-
-        if build:
-            place_building(x, y, factory)
-            factory_count += 1
-            city_jobs += factory.open_positions
-
-            if unemployed_population >= city_open_job_positions:
-                city_open_job_positions = 0
-                unemployed_population -= city_open_job_positions
-            else:
-                unemployed_population = 0
-                city_open_job_positions -= unemployed_population
-
-    employed_population = city_population - unemployed_population
-'''
-def try_building_in_zone(x, y):
+    global construction_started_this_tick
     zone = grid[y][x]
     build = False
 
     # --- RESIDENTIAL ---
     if isinstance(zone, Residential):
         # allow early growth OR demand-based growth
-        if house_count < 6 or residential_demand > 0:
+        if house_count < 6 or residential_demand > 0.1:
             build = True
 
         if build:
             house = House()
             place_building(x, y, house)
-            # DO NOT add population here anymore
-            # DO NOT increase happiness here
-            # construction system will handle it
+            construction_started_this_tick = True
             return
 
     # --- COMMERCIAL ---
@@ -260,7 +188,7 @@ def try_building_in_zone(x, y):
         if build:
             store = Store()
             place_building(x, y, store)
-            # DO NOT add jobs here
+            construction_started_this_tick = True
             return
 
     # --- INDUSTRIAL ---
@@ -271,7 +199,7 @@ def try_building_in_zone(x, y):
         if build:
             factory = Factory()
             place_building(x, y, factory)
-            # DO NOT add jobs here
+            construction_started_this_tick = True
             return
 
 
@@ -311,26 +239,33 @@ def calculate_demand():
 def update_construction(delta_time):
     global city_population, city_jobs
 
+    finished = []
+
     for building, x, y in buildings:
         if not building.built:
             building.remaining_time -= delta_time
-            building_animation = True
 
             if building.remaining_time <= 0:
                 building.built = True
                 city_population += building.population
                 city_jobs += building.open_positions
+                finished.append((building, x, y))
+
+    return finished
+
 
 
 # RESOURCES AND TIME UPDATES
 # We will be running it through on_update() function every second.
 # (So the Buildings will bring income and happiness every second)
 def update_city():
-    global city_money, city_happiness, city_population, store_count, house_count, factory_count
+    global city_money, city_happiness, city_population, store_count, house_count, factory_count, construction_started_this_tick
 
     store_count = sum(isinstance(b, Store) for b, _, _ in buildings)
     house_count = sum(isinstance(b, House) for b, _, _ in buildings)
     factory_count = sum(isinstance(b, Factory) for b, _, _ in buildings)
+
+    construction_started_this_tick = False
 
 
 
@@ -339,7 +274,8 @@ def update_city():
             # Calculating demand for the try_building_in_zone to work properly
             calculate_demand()
             # Building a building if the demand is higher than 0
-            try_building_in_zone(x, y)
+            if not construction_started_this_tick:
+                try_building_in_zone(x, y)
 
     for row in grid:
         for tile in row:
