@@ -4,6 +4,9 @@ from pathlib import Path
 import logic
 import time
 
+#novoje
+import save_load
+
 # window = arcade.Window(fullscreen=True, title='SimCity')
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
@@ -151,7 +154,9 @@ class GameView(arcade.View):
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         if self.show_settings:
+
             if self.window_middle_x-138 <= x <= self.window_middle_x-35 and self.window_middle_y-25 <= y <= self.window_middle_y+24:
+                    save_load.save_game()
                     arcade.exit()
             elif self.window_middle_x+74 <= x <= self.window_middle_x+128 and self.window_middle_y-25 <= y <= self.window_middle_y+24:
                 self.show_settings = False
@@ -201,6 +206,44 @@ class GameView(arcade.View):
                 self.warning_timer = time.time()
 
 
+
+
+
+
+
+    #Novaje
+    def rebuild_scene_from_logic(self):
+        tile_size = 16*2
+        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
+
+        self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
+        self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
+        self.window_width = self.window.width
+        self.window_height = self.window.height
+
+        self.offset_x = self.window_width / 2 - self.map_width / 2
+        self.offset_y = self.window_height / 2 - self.map_height / 2
+
+        for layer in tile_map.sprite_lists.values():
+            for sprite in layer:
+                sprite.center_x += self.offset_x
+                sprite.center_y += self.offset_y
+
+        self.scene = arcade.Scene.from_tilemap(tile_map)
+        for y, row in enumerate(logic.grid):
+            for x, cell in enumerate(row):
+                if cell is None:
+                    continue
+                if isinstance(cell, logic.House):
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=3)
+                elif isinstance(cell,logic.Store):
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
+                elif isinstance(cell,logic.Factory) :
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
+                else: continue
+                sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
+                sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
+                self.scene.add_sprite("Zone", sprite)
     def on_update(self, delta_time: float):
 
         if time.time() - self.last_update_time > 1:
