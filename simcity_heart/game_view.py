@@ -1,5 +1,6 @@
 import arcade
 from pathlib import Path
+
 import logic
 import time
 
@@ -15,7 +16,7 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         # Loading the map
-        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=3)
+        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
         self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
         self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
@@ -24,6 +25,7 @@ class GameView(arcade.View):
 
         self.offset_x = self.window_width / 2 - self.map_width / 2
         self.offset_y = self.window_height / 2 - self.map_height / 2
+
 
         for layer in tile_map.sprite_lists.values():
             for sprite in layer:
@@ -35,12 +37,20 @@ class GameView(arcade.View):
         #TIME
         self.last_update_time = time.time()
 
-        #Picking a zone
-        self.picked_zone = ''
+        #Picking a placeable
+        self.picked_placeable = ''
         self.house = 'House'
         self.store = 'Store'
         self.factory = 'Factory'
+        self.road = 'Road'
+        vertical_road = 'Road (vertical)'
+        horizontal_road = 'Road (horizontal)'
+        self.road_types = [vertical_road, horizontal_road]
 
+
+        #Settings button
+        # Список спрайтов для удобства
+        self.ui_sprites = arcade.SpriteList()
         #warning sign
         self.warning_list = arcade.SpriteList()
         self.warning_sprite = arcade.Sprite("assets/images/warning_bulding.png", scale=0.25)
@@ -48,11 +58,10 @@ class GameView(arcade.View):
         self.warning_sprite.center_y = self.window.height / 2
         self.warning_list.append(self.warning_sprite)
 
+
         self.show_warning = False
 
-        #Settings button
-
-        self.ui_sprites = arcade.SpriteList()
+        # Загружаем шестерёнку
         self.window_middle_x, self.window_middle_y = self.window.width / 2, self.window.height / 2
         self.settings_gear = arcade.Sprite(
             "assets/images/setting_bt.png",
@@ -73,20 +82,31 @@ class GameView(arcade.View):
         self.settings = arcade.Text("SETTINGS",self.window_middle_x, self.window_middle_y+250, arcade.color.WHITE,35, anchor_x="center")
 
 
+        self.building_sprites = {}
+        self.construction_texture = arcade.load_texture("assets/maps/Tiles/tile_0012.png")
+
+        self.final_textures = {
+            logic.House: arcade.load_texture("assets/maps/Tiles/tile_0027.png"),
+            logic.Store: arcade.load_texture("assets/maps/Tiles/tile_0046.png"),
+            logic.Factory: arcade.load_texture("assets/maps/Tiles/tile_0083.png"),
+        }
+
     def on_draw(self) -> None:
         self.clear()
         self.scene.draw()
         arcade.draw_text(f"Money: {logic.city_money}", 20, 20, arcade.color.WHITE, 20)
         arcade.draw_text(f"Happiness: {int(logic.city_happiness)}", 20, 50, arcade.color.WHITE, 20)
-        arcade.draw_text(f"Selected: {self.picked_zone if self.picked_zone else 'None'}",
+        arcade.draw_text(f"Selected: {self.picked_placeable if self.picked_placeable else 'None'}",
                          20, 80, arcade.color.WHITE, 20)
         arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
 
-        # Demand
+        #Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
         arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.GREEN, 20)
         arcade.draw_text(f"{round(logic.commercial_demand, 2)}", self.window_width - 80, 50, arcade.color.BLUE, 20)
         arcade.draw_text(f"{round(logic.industrial_demand, 2)}", self.window_width - 80, 80, arcade.color.YELLOW, 20)
+
+
         self.ui_sprites.draw()
         if self.show_settings:
             arcade.draw_lbwh_rectangle_filled(0, 0,self.window_width,self.window_height,(0, 0, 0, 200))
@@ -100,30 +120,37 @@ class GameView(arcade.View):
 
 
 
+
+
     def on_key_press(self, symbol: int, modifiers: int) -> None:
+        road_picked = False
+
         if symbol == arcade.key.ESCAPE:
             self.window.close()
 
+
         # Picking a zone through pressing on keyboard
         if symbol == arcade.key.H:
-            self.picked_zone = self.house
+            self.picked_placeable = self.house
         elif symbol == arcade.key.S:
-            self.picked_zone = self.store
+            self.picked_placeable = self.store
         elif symbol == arcade.key.F:
-            self.picked_zone = self.factory
+            self.picked_placeable = self.factory
+        elif symbol == arcade.key.R:
+            self.picked_placeable = self.road_types[0]
 
-    def on_update(self, delta_time: float):
-        # Money and Happiness update every 15 seconds
-        logic.update_construction(delta_time)
-
-        if time.time() - self.last_update_time > 1:
-            logic.update_city()
-            self.last_update_time = time.time()
-        #warning button for 2 seconds
-        if self.show_warning and time.time() - self.warning_timer > 2:
-            self.show_warning = False
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
+
+        if self.picked_placeable == self.road_types[0]:
+            if button == arcade.MOUSE_BUTTON_RIGHT:
+                self.picked_placeable = self.road_types[1]
+        else:
+            if button == arcade.MOUSE_BUTTON_RIGHT:
+                self.picked_placeable = self.road_types[0]
+
+
+
         if button != arcade.MOUSE_BUTTON_LEFT:
             return
         if self.show_settings:
@@ -138,7 +165,11 @@ class GameView(arcade.View):
             if self.settings_gear.collides_with_point((x, y)):
                 self.show_settings = True
 
-            tile_size = 16 * 3  # base tile size × scaling
+
+
+            # Placing a zone
+
+            tile_size = 16 * 2  # base tile size × scaling
             grid_x = int((x - self.offset_x) // tile_size)
             grid_y = int((y - self.offset_y) // tile_size)
 
@@ -148,20 +179,28 @@ class GameView(arcade.View):
                 return
 
 
-            if self.picked_zone == self.house:
-                zone_type = logic.Residential
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=3)
-            elif self.picked_zone == self.store:
-                zone_type = logic.Commercial
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
-            elif self.picked_zone == self.factory:
-                zone_type = logic.Industrial
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
-            # Try placing the building in logic
-            if logic.try_placing_zone(grid_x, grid_y, zone_type):
+            if self.picked_placeable == self.house:
+                placeable = logic.Residential
+                sprite = arcade.Sprite(":my-assets:images/green_zone.png", scale=0.055)
+            elif self.picked_placeable == self.store:
+                placeable = logic.Commercial
+                sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
+            elif self.picked_placeable == self.factory:
+                placeable = logic.Industrial
+                #sprite = arcade.Sprite(':my-assets:maps/Tiles/tile_0079.png', scale=3)
+                sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
+            elif self.picked_placeable == self.road_types[0]:
+                placeable = logic.VerticalRoad
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
+            elif self.picked_placeable == self.road_types[1]:
+                placeable = logic.HorizontalRoad
+                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
+
+            # Try placing the placeable in logic
+            if logic.try_placing_placeable(grid_x, grid_y, placeable):
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
-                self.scene.add_sprite("Zone", sprite)
+                self.scene.add_sprite('Object', sprite)
             else:
                 self.show_warning = True
                 self.warning_timer = time.time()
@@ -174,8 +213,8 @@ class GameView(arcade.View):
 
     #Novaje
     def rebuild_scene_from_logic(self):
-        tile_size = 16*3
-        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=3)
+        tile_size = 16*2
+        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
         self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
         self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
@@ -205,11 +244,40 @@ class GameView(arcade.View):
                 sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
                 self.scene.add_sprite("Zone", sprite)
+    def on_update(self, delta_time: float):
+
+        if time.time() - self.last_update_time > 1:
+            logic.update_city()
+            self.last_update_time = time.time()
+
+        # Money and Happiness update every second
+        finished = logic.update_construction(delta_time)
+
+        for building, x, y in finished:
+            sprite = self.building_sprites[(x, y)]
+            sprite.texture = self.final_textures[type(building)]
+
+        for building, x, y in logic.buildings:
+            if not building.built and (x, y) not in self.building_sprites:
+                tile_size = 16 * 2
+
+                sprite = arcade.Sprite(self.construction_texture, scale=2)
+                sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
+                sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
+
+                self.scene.add_sprite("Object", sprite)
+                self.building_sprites[(x, y)] = sprite
+
+
+        if self.show_warning and time.time() - self.warning_timer > 2:
+            self.show_warning = False
 
 
 
 def main():
-    window = arcade.Window(1020, 720, "SimCity")
+    # window = arcade.Window(fullscreen=True, title="SimCity")
+    window = arcade.Window(width=1024, height=768, title="SimCity")
+
     window.center_window()
     game = GameView()
     window.show_view(game)
