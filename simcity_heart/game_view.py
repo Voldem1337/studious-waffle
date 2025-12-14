@@ -99,6 +99,7 @@ class GameView(arcade.View):
         arcade.draw_text(f"Selected: {self.picked_placeable if self.picked_placeable else 'None'}",
                          20, 80, arcade.color.WHITE, 20)
         arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
+        arcade.draw_text(f"City Profit: {logic.city_profit}", 20, 140, arcade.color.WHITE, 20)
 
         #Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
@@ -197,13 +198,15 @@ class GameView(arcade.View):
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
 
             # Try placing the placeable in logic
-            if logic.try_placing_placeable(grid_x, grid_y, placeable):
+            if logic.try_placing_placeable(grid_x, grid_y, placeable) == 'placed':
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
                 self.scene.add_sprite('Object', sprite)
-            else:
+            elif logic.try_placing_placeable(grid_x, grid_y, placeable) == 'occupied':
                 self.show_warning = True
                 self.warning_timer = time.time()
+            elif logic.try_placing_placeable(grid_x, grid_y, placeable) == 'no_money':
+                print('not enough money')
 
 
     #Novaje
