@@ -16,10 +16,10 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         # Loading the map
-        tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
+        self.tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
-        self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
-        self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
+        self.map_width = self.tile_map.width * self.tile_map.tile_width * self.tile_map.scaling
+        self.map_height = self.tile_map.height * self.tile_map.tile_height * self.tile_map.scaling
         self.window_width = self.window.width
         self.window_height = self.window.height
 
@@ -27,12 +27,12 @@ class GameView(arcade.View):
         self.offset_y = self.window_height / 2 - self.map_height / 2
 
 
-        for layer in tile_map.sprite_lists.values():
+        for layer in self.tile_map.sprite_lists.values():
             for sprite in layer:
                 sprite.center_x += self.offset_x
                 sprite.center_y += self.offset_y
 
-        self.scene = arcade.Scene.from_tilemap(tile_map)
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
         #TIME
         self.last_update_time = time.time()
@@ -170,12 +170,12 @@ class GameView(arcade.View):
             # Placing a zone
 
             tile_size = 16 * 2  # base tile size × scaling
-            grid_x = int((x - self.offset_x) // tile_size)
-            grid_y = int((y - self.offset_y) // tile_size)
+            grid_x = int((x - self.offset_x) / tile_size)
+            grid_y = int((y - self.offset_y) / tile_size)
 
 
             # Check bounds before placing
-            if not (0 <= grid_x < len(logic.grid[0]) and 0 <= grid_y < len(logic.grid)):
+            if not (0 <= grid_x < len(logic.grid[0]) and 0 <= grid_y < len(logic.grid) + 1):
                 return
 
 
@@ -206,11 +206,6 @@ class GameView(arcade.View):
                 self.warning_timer = time.time()
 
 
-
-
-
-
-
     #Novaje
     def rebuild_scene_from_logic(self):
         tile_size = 16*2
@@ -235,15 +230,21 @@ class GameView(arcade.View):
                 if cell is None:
                     continue
                 if isinstance(cell, logic.House):
-                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=3)
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=2)
                 elif isinstance(cell,logic.Store):
-                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=3)
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=2)
                 elif isinstance(cell,logic.Factory) :
-                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=3)
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0083.png", scale=2)
+                elif isinstance(cell,logic.VerticalRoad):
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
+                elif isinstance(cell,logic.HorizontalRoad):
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
                 else: continue
                 sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
                 self.scene.add_sprite("Zone", sprite)
+
+
     def on_update(self, delta_time: float):
 
         if time.time() - self.last_update_time > 1:
