@@ -20,7 +20,7 @@ industrial_demand = 0
 
 
 # THE GRID
-grid = [[None for _ in range(36)] for _ in range(22)]
+grid = [[None for _ in range(32)] for _ in range(24)]
 
 # Since the y coordinates are measured from the top in matrix, the matrix maps y is reversed compared to
 # the actual game map.
