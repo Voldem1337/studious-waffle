@@ -242,6 +242,12 @@ class GameView(arcade.View):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
                 elif isinstance(cell,logic.HorizontalRoad):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
+                elif isinstance(cell,logic.Residential):
+                    sprite = arcade.Sprite(":my-assets:images/green_zone.png", scale=0.055)
+                elif isinstance(cell,logic.Commercial):
+                    sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
+                elif isinstance(cell,logic.Industrial):
+                    sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
                 else: continue
                 sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
