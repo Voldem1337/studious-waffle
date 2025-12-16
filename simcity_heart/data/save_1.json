@@ -1,17 +1,17 @@
 {
   "city": {
     "money": 10000,
-    "happiness": 0.09999999999999999,
-    "population": 0,
-    "house_count": 2,
+    "happiness": 1.7900000000000014,
+    "population": 26,
+    "house_count": 3,
     "store_count": 0,
     "factory_count": 0,
     "city_jobs": 0
   },
   "demand": {
-    "residential": 0.004,
-    "commercial": 0,
-    "industrial": 0
+    "residential": -25.912,
+    "commercial": 2.6,
+    "industrial": 29.9
   },
   "grid": [
     [
@@ -550,7 +550,17 @@
         "name": "Vertical Road"
       },
       null,
-      null,
+      {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 9,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": 5.156899791007163,
+        "built": false
+      },
       null,
       null,
       null,
@@ -1050,8 +1060,8 @@
         "population": 7,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": 3.0061912999954075,
-        "built": false
+        "remaining_time": -0.011608909000642598,
+        "built": true
       },
       "x": 15,
       "y": 12
@@ -1065,12 +1075,27 @@
         "population": 10,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": 7.03888750000624,
-        "built": false
+        "remaining_time": -0.0036167090001981705,
+        "built": true
       },
       "x": 16,
       "y": 10
+    },
+    {
+      "building": {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 9,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.016401375978603028,
+        "built": true
+      },
+      "x": 20,
+      "y": 12
     }
   ],
-  "timestamp": 1765739714.0742633
+  "timestamp": 1765887447.721792
 }
