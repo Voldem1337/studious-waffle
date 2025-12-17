@@ -30,20 +30,6 @@ Muu
 
 Ava Settings menüü, kui klikid ⚙️ ikoonile paremas ülanurgas
 
-# Projekti kirjeldus
-
-See projekt on SimCity-stiilis linnasimulaator, mis on arendatud Pythonis, kasutades Arcade teeki. Mängija ehitab linna ruudustikupõhisel kaardil, paigutades erinevaid hooneid, hallates raha, elanikkonda, õnne (happiness) ja hoolduskulusid.
-
-# Ehitus ja kaart
-Linn koosneb grid-põhisest kaardist, iga ruut võib sisaldada ühte objekti
-
-Hooneid saab:
-
-- ehitada
-
-- eemaldada (paremklõps)
-
-Ehitamine on piiratud kaardi suurusega
 
 # Ekraanil kuvatav info (HUD)
 
@@ -62,6 +48,21 @@ Mängu ekraanil kuvatakse reaalajas järgmised andmed:
 - Selected – hetkel valitud hoone
 
 - Demand – elamu-, äri- ja tööstusnõudlus
+
+# Projekti kirjeldus
+
+See projekt on SimCity-stiilis linnasimulaator, mis on arendatud Pythonis, kasutades Arcade teeki. Mängija ehitab linna ruudustikupõhisel kaardil, paigutades erinevaid hooneid, hallates raha, elanikkonda, õnne (happiness) ja hoolduskulusid.
+
+# Ehitus ja kaart
+Linn koosneb grid-põhisest kaardist, iga ruut võib sisaldada ühte objekti
+
+Hooneid saab:
+
+- ehitada
+
+- eemaldada
+
+Ehitamine on piiratud kaardi suurusega
 
 # Hoonete tüübid
 House (elamud)
