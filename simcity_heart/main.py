@@ -2,8 +2,8 @@ import arcade
 import os
 from pathlib import Path
 import save_load
-import config  # Импортируем настройки
 from game_view import GameView
+import config
 
 
 class MainView(arcade.View):
@@ -13,8 +13,8 @@ class MainView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        # Получаем музыкальный плеер из config
         self.music_player = config.music_player
+
 
         # adding bc
         img1 = 'assets/images/Loading.png'
@@ -27,7 +27,7 @@ class MainView(arcade.View):
         self.window_middle_y = self.window_height / 2
 
         self.left_handle_X = self.window_middle_x - 200
-        self.handle_X = self.left_handle_X + 350 * (config.volume / 100)  # Используем config.volume
+        self.handle_X = self.left_handle_X + 350 * (config.volume / 100)
 
         # path
         self.menu_bar = arcade.Sprite('assets/images/menu_bars.png', scale=0.5)
@@ -193,7 +193,8 @@ class MainView(arcade.View):
             for name, b in self.buttons.items():
                 if x >= b['x'] and x <= b['x'] + b['w'] and y >= b['y'] and y <= b['y'] + b['h']:
                     if name == "New Game":
-                        game = GameView()
+                        from worldname import Worldname
+                        game = Worldname()
                         self.window.show_view(game)
                     elif name == "Load Game":
                         if save_load.load_game(slot_number=1):
@@ -215,6 +216,7 @@ class MainView(arcade.View):
                 self.show_confirm = False
                 self.clear()
 
+
         elif self.show_settings:
             if abs(x - self.handle_X) <= 15 and abs(y - (self.window_middle_y + 127)) <= 15:
                 self.dragging = True
@@ -228,6 +230,7 @@ class MainView(arcade.View):
             if self.window_middle_x - 186 <= x <= self.window_middle_x - 114 and self.window_middle_y - 152 <= y <= self.window_middle_y - 131:
                 self.show_settings = False
                 self.clear()
+
 
             if (self.dropdown_x <= x <= self.dropdown_x + self.dropdown_width and
                     self.dropdown_y <= y <= self.dropdown_y + self.dropdown_height):
@@ -261,6 +264,7 @@ class MainView(arcade.View):
 
                         # updating positioning of elements
                         self._update_ui_positions()
+                        config.save_config()
                         return
 
             # Volume
@@ -275,7 +279,6 @@ class MainView(arcade.View):
                 self.clear()
 
     def _update_ui_positions(self):
-        """Обновляет позиции ВСЕХ UI элементов после смены разрешения"""
         self.window_width, self.window_height = self.window.get_size()
         self.window_middle_x = self.window.width / 2
         self.window_middle_y = self.window.height / 2
@@ -334,18 +337,29 @@ class MainView(arcade.View):
             self.volume.text = f"Volume: {config.volume}%"
 
 
+    def on_key_press(self, symbol: int, modifiers: int):
+        if symbol == arcade.key.ESCAPE:
+            if self.show_settings:
+                self.show_settings = False
+            elif self.show_confirm:
+                self.show_confirm = False
+            elif not self.show_confirm:
+                self.show_confirm = True
+
+
+
 class Loading_screen(arcade.View):
     def __init__(self):
+        # music loop
+
+        self.music = arcade.Sound('assets/music/Menu_music.mp3')
+        self.music_player = self.music.play(volume=config.volume / 100, loop=True)
+        config.set_music_player(self.music_player)
         # initialization picture
         self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2
         super().__init__()
         img1 = 'assets/images/Loading.png'
         self.bc = arcade.Sprite(img1, scale=1)
-
-        # music loop
-        self.music = arcade.Sound('assets/music/Menu_music.mp3')
-        self.music_player = self.music.play(volume=config.volume / 100, loop=True)
-        config.set_music_player(self.music_player)  # Сохраняем в config
 
         screen_width, screen_height = window.get_size()
 
@@ -420,7 +434,19 @@ class Loading_screen(arcade.View):
 
 
 if __name__ == '__main__':
-    window = arcade.Window(height=720, width=1280, title='SimCity')
+    try:
+        config.load_config()
+        num = config.current_resolution_index
+        if num == 0:
+            window = arcade.Window(fullscreen=True, title='SimCity')
+        elif num == 1:
+            window = arcade.Window(width=1920, height=1080, title='SimCity')
+        elif num == 2:
+            window = arcade.Window(width=1600, height=900, title='SimCity')
+        elif num == 3:
+            window = arcade.Window(width=1280, height=720, title='SimCity')
+    except Exception:
+        window = arcade.Window(width=1920, height=1080, title='SimCity')
     window.center_window()
     assets_path = Path().absolute().resolve() / Path('assets')
     arcade.resources.add_resource_handle('my-assets', assets_path)
