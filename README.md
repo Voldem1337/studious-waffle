@@ -1,5 +1,3 @@
-# Controls
-
 # Klaviatuuri juhtimine
 Hoonete valimine
 
@@ -46,6 +44,24 @@ Hooneid saab:
 - eemaldada (paremklõps)
 
 Ehitamine on piiratud kaardi suurusega
+
+# Ekraanil kuvatav info (HUD)
+
+Mängu ekraanil kuvatakse reaalajas järgmised andmed:
+
+- Date – mängusisene kuupäev
+
+- Money – linna raha
+
+- Happiness – elanike õnnetase (%)
+
+- Population – elanike arv
+
+- City Profit – linna kasum tunnis
+
+- Selected – hetkel valitud hoone
+
+- Demand – elamu-, äri- ja tööstusnõudlus
 
 # Hoonete tüübid
 House (elamud)
