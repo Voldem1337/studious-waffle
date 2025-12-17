@@ -1,15 +1,10 @@
 import random
-from datetime import datetime, timedelta
-
-import arcade
 
 # STARTING DATA
 city_money = 10000
 city_happiness = 0
 city_population = 0
 city_jobs = 0
-city_maintenance = 0 # amount of money needed to maintain the city every second (in game hour)
-city_profit = 0
 
 buildings = []
 house_count = 0
@@ -20,25 +15,12 @@ residential_demand = 0
 commercial_demand = 0
 industrial_demand = 0
 
-GAME_START_DATE = datetime(2025, 1, 1)
-game_time_hours = 0.0
-
-def update_time(delta_time):
-    global game_time_hours
-    game_time_hours += delta_time # 1 sec = 1 game hour
-
-def get_game_date():
-    return GAME_START_DATE + timedelta(hours=game_time_hours)
-
-def get_date_string():
-    return get_game_date().strftime("%d.%m.%Y")
-
 
 
 
 
 # THE GRID
-grid = [[None for _ in range(32)] for _ in range(24)]
+grid = [[None for _ in range(36)] for _ in range(22)]
 
 # Since the y coordinates are measured from the top in matrix, the matrix maps y is reversed compared to
 # the actual game map.
@@ -49,34 +31,28 @@ def get_tile(x, y):
     return grid[y][x]
 
 def place_building(x, y, building):
-    global city_happiness
     grid[y][x] = building
     print(f'{building} BUILT on {x}, {y}')
-
     buildings.append((building, x, y))
 
 
 # Creating Placeable objects (object that can be placed by a player)
 class Placeable:
-    def __init__(self, name, income=0, happiness=0.0, population=0, cost=0, maintenance=0):
+    def __init__(self, name, income=0, happiness=0.0, population=0):
         self.name = name
         self.income = income
         self.happiness = happiness
         self.population = population
-        self.cost = cost
-        self.maintenance = maintenance
 
 
 #ROADS
 class VerticalRoad(Placeable):
     def __init__(self):
-        super().__init__('Vertical Road', income=0, happiness=0, population=0, cost=500, maintenance=1)
+        super().__init__('Vertical Road')
 
 class HorizontalRoad(Placeable):
     def __init__(self):
-        super().__init__('Horizontal Road',0,0,0,500,1)
-        self.cost = 500
-        self.maintenance = 1
+        super().__init__('Horizontal Road')
 
 #WATER
 class Water(Placeable):
@@ -87,7 +63,6 @@ class Water(Placeable):
 class Tree(Placeable):
     def __init__(self):
         super().__init__('Tree')
-        self.removal_cost = 500
 
 #Drawing the starting location
 for y in range(len(grid)):
@@ -137,17 +112,14 @@ class Industrial(Zone):
     def __init__(self):
         super().__init__('Industrial Zone')
 
-
 # Buildings (can't be place by a player)
 class Building:
-    def __init__(self, name, income=0, happiness=0.0, population=0, open_positions=0, maintenance=0, cost=0):
+    def __init__(self, name, income=0, happiness=0.0, population=0, open_positions=0):
         self.name = name
         self.income = income
         self.happiness = happiness
         self.population = population
         self.open_positions = open_positions
-        self.maintenance = maintenance
-        self.cost = cost
 
         self.build_time = 0
         self.remaining_time = 0
@@ -177,76 +149,30 @@ class Factory(Building):
         self.remaining_time = self.build_time
         self.built = False
 
-# Townhall - opportunity to build Townhall is given after player reaches 250 population.
-class TownHall(Building):
-    def __init__(self):
-        super().__init__('TownHall',0,0.1,0,10, 10, 50000)
-
-        self.momentary_happiness_boost = 10
-        self.build_time = 2
-        self.remaining_time = self.build_time
-        self.built = False
-
 
 # The process of placing a placeable
 def try_placing_placeable(x, y, placeable):
-    global city_money, city_maintenance, city_happiness
-
+    print(f"TRY placing a zone at {x}, {y}")
     placeable = placeable()
 
-    if grid[y][x] is not None:
-        return "occupied"
-
-    if hasattr(placeable, 'cost'):
-        if placeable.cost > city_money:
-            return "no_money"
-
-        city_money -= placeable.cost
-
-    if hasattr(placeable, 'maintenance'):
-        city_maintenance += placeable.maintenance
-
-    grid[y][x] = placeable
-
-    # 👉 если это Building (House, Store, Factory, TownHall) — запускаем стройку
-    if isinstance(placeable, TownHall):
-        buildings.append((placeable, x, y))
-
-    return "placed"
-
-
-def try_removing_object(x, y):
-    global city_money
-    tile = grid[y][x]
-
-    if tile is None:
-        return 'tile_is_none'
-
-    if isinstance(tile, Tree):
-        city_money = city_money - tile.removal_cost
-        print('Tree removed, 500$ spent')
-        grid[y][x] = None
-        return 'tree_removed'
-
-    #remove object
-    grid[y][x] = None
-    return 'removed'
-
-
+    if grid[y][x] is None:
+        print(f"✅ Conditions met — placing a {placeable.name}")
+        grid[y][x] = placeable
+        return True
+    print(f"❌ Conditions failed — grid[{x},{y}]={grid[y][x]}")
+    return False
 
 
 def try_building_in_zone(x, y):
-    global construction_started_this_tick, city_happiness
+    global construction_started_this_tick
     zone = grid[y][x]
     build = False
 
     # --- RESIDENTIAL ---
     if isinstance(zone, Residential):
         # allow early growth OR demand-based growth
-        if house_count < 4 or residential_demand > 0.1:
-            luck = random.randint(0, 10)
-            if luck == 10:
-                build = True
+        if house_count < 6 or residential_demand > 0.1:
+            build = True
 
         if build:
             house = House()
@@ -257,9 +183,7 @@ def try_building_in_zone(x, y):
     # --- COMMERCIAL ---
     if isinstance(zone, Commercial):
         if commercial_demand > 0:
-            luck = random.randint(0, 10)
-            if luck == 10:
-                build = True
+            build = True
 
         if build:
             store = Store()
@@ -270,9 +194,7 @@ def try_building_in_zone(x, y):
     # --- INDUSTRIAL ---
     if isinstance(zone, Industrial):
         if industrial_demand > 0:
-            luck = random.randint(0, 10)
-            if luck == 10:
-                build = True
+            build = True
 
         if build:
             factory = Factory()
@@ -314,20 +236,8 @@ def calculate_demand():
     else:
         industrial_demand = 0
 
-
-def calculate_city_profit(buildings, city_maintenance):
-    total_income = 0
-
-    for building, x, y in buildings:
-        total_income += getattr(building, 'income', 0)
-
-
-    profit = total_income - city_maintenance
-    return profit
-
-
 def update_construction(delta_time):
-    global city_population, city_jobs, buildings
+    global city_population, city_jobs
 
     finished = []
 
@@ -339,92 +249,9 @@ def update_construction(delta_time):
                 building.built = True
                 city_population += building.population
                 city_jobs += building.open_positions
-                if isinstance(building, TownHall):
-                    global city_happiness
-                    city_happiness += building.momentary_happiness_boost
-
                 finished.append((building, x, y))
 
     return finished
-
-def calculate_pollution_penalty():
-    penalty = 0
-    radius = 2  # factory pollution radius
-
-    for y in range(len(grid)):
-        for x in range(len(grid[y])):
-            if isinstance(grid[y][x], Factory):
-                for dy in range(-radius, radius + 1):
-                    for dx in range(-radius, radius + 1):
-                        nx, ny = x + dx, y + dy
-                        if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
-                            if isinstance(grid[ny][nx], House):
-                                penalty += 2
-    return penalty
-
-def calculate_demand_imbalance_penalty():
-    demands = [
-        abs(residential_demand),
-        abs(commercial_demand),
-        abs(industrial_demand)
-    ]
-
-    imbalance = max(demands) - min(demands)
-
-    return imbalance * 0.5
-
-def calculate_townhall_bonus():
-    return 5 if any(isinstance(b, TownHall) and b.built for b, _, _ in buildings) else 0
-
-def calculate_building_happiness():
-    happiness = 0
-    radius = 2  # store influence radius
-
-    for building, x, y in buildings:
-        if not building.built:
-            continue
-
-        happiness += building.happiness * 100
-
-        # Bonus if a store is near a house
-        if isinstance(building, House):
-            for dx in range(-radius, radius + 1):
-                for dy in range(-radius, radius + 1):
-                    nx, ny = x + dx, y + dy
-
-                    if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid):
-                        neighbour = grid[ny][nx]
-
-                        if (
-                            isinstance(neighbour, Store)
-                            and neighbour.built
-                        ):
-                            happiness += 1  # +1% for every store nearby
-
-    return happiness
-
-
-
-def calculate_city_happiness():
-    happiness = 50  # base level
-
-    happiness += calculate_building_happiness()
-    happiness += calculate_townhall_bonus()
-    happiness -= calculate_pollution_penalty()
-    happiness -= calculate_demand_imbalance_penalty()
-
-    return max(0, min(100, happiness))
-
-def rebuild_buildings_from_grid():
-    global buildings
-    buildings = []
-
-    for y in range(len(grid)):
-        for x in range(len(grid[y])):
-            tile = grid[y][x]
-            if isinstance(tile, Building):
-                buildings.append((tile, x, y))
-
 
 
 
@@ -432,14 +259,11 @@ def rebuild_buildings_from_grid():
 # We will be running it through on_update() function every second.
 # (So the Buildings will bring income and happiness every second)
 def update_city():
-    global city_money, city_happiness, city_population, store_count, house_count, factory_count, construction_started_this_tick, city_maintenance, city_profit
+    global city_money, city_happiness, city_population, store_count, house_count, factory_count, construction_started_this_tick
 
     store_count = sum(isinstance(b, Store) for b, _, _ in buildings)
     house_count = sum(isinstance(b, House) for b, _, _ in buildings)
     factory_count = sum(isinstance(b, Factory) for b, _, _ in buildings)
-
-
-
 
     construction_started_this_tick = False
 
@@ -453,7 +277,6 @@ def update_city():
             if not construction_started_this_tick:
                 try_building_in_zone(x, y)
 
-
     for row in grid:
         for tile in row:
             # If something is placed on this tile,
@@ -461,11 +284,14 @@ def update_city():
                 # then it gives income
                 city_money += tile.income
 
-    city_money = city_money - city_maintenance
+                # and happiness
+                if city_happiness + tile.happiness > 100:
+                    city_happiness = 100
+                elif city_happiness + tile.happiness <= 0:
+                    city_happiness = 0
+                else:
+                    city_happiness += tile.happiness
 
-    city_profit = calculate_city_profit(buildings, city_maintenance)
-
-    city_happiness = calculate_city_happiness()
 
 
 #GAME STATE MANAGEMENT
