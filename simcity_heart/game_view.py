@@ -158,9 +158,9 @@ class GameView(arcade.View):
 
             if self.show_settings:
                 if self.window_middle_x - 138 <= x <= self.window_middle_x - 35 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
-                    save_load.save_game()
+                    config.load_config()
+                    save_load.save_game(config.current_world_name)
                     from main import MainView
-                    # Музыка уже играет через config.music_player
                     game = MainView()
                     self.window.show_view(game)
                 elif self.window_middle_x + 74 <= x <= self.window_middle_x + 128 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:

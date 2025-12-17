@@ -41,7 +41,7 @@ class Worldname(arcade.View):
 
             arcade.draw_lbwh_rectangle_filled(
                 self.input_box_x ,
-                self.input_box_y - i * 150,
+                self.input_box_y - i * 80,
                 self.input_box_width,
                 self.input_box_height,
                 arcade.color.DARK_GRAY
@@ -49,13 +49,45 @@ class Worldname(arcade.View):
 
             arcade.draw_lbwh_rectangle_outline(
                 self.input_box_x,
-                self.input_box_y + i * 150,
+                self.input_box_y - i * 80,
                 self.input_box_width,
                 self.input_box_height,
                 arcade.color.WHITE,
                 3
             )
+            arcade.draw_text(f'{self.world_names[i]}',
+                self.input_box_x + self.input_box_width / 2,
+                self.input_box_y + self.input_box_height / 2 - i * 80- 10,
+                arcade.color.WHITE,20,
+                anchor_x='center'
+            )
         self.title.draw()
+
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
+        if button != arcade.MOUSE_BUTTON_LEFT:
+            return
+
+        for i, world_name in enumerate(self.world_names):
+            rect_x = self.input_box_x
+            rect_y = self.input_box_y - i * 80
+            rect_w = self.input_box_width
+            rect_h = self.input_box_height
+
+            if (
+                    rect_x <= x <= rect_x + rect_w and
+                    rect_y <= y <= rect_y + rect_h
+            ):
+                print(f"Clicked on world: {world_name}")
+
+                from game_view import GameView
+                import save_load
+
+                if save_load.load_game(world_name):
+                    game = GameView()
+                    game.rebuild_scene_from_logic()
+                    self.window.show_view(game)
+
+                return
 
     def on_update(self, delta_time):
         self.cursor_timer += delta_time

@@ -197,12 +197,11 @@ class MainView(arcade.View):
                         game = Worldname()
                         self.window.show_view(game)
                     elif name == "Load Game":
-                        if save_load.load_game(slot_number=1):
-                            game = GameView()
-                            game.rebuild_scene_from_logic()
-                            self.window.show_view(game)
-                        else:
-                            print("Game not loaded")
+
+                        from load_worlds import Worldname
+                        game = Worldname()
+                        self.window.show_view(game)
+
                     elif name == "Settings":
                         self.show_settings = True
                     elif name == "Exit":
