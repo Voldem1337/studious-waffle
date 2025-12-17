@@ -82,6 +82,16 @@ def deserialize_tile(tile_data):
         factory.remaining_time = tile_data['remaining_time']
         factory.built = tile_data['built']
         return factory
+    elif tile_type == 'TownHall':
+        townhall = logic.TownHall()
+        townhall.income = tile_data['income']
+        townhall.happiness = tile_data['happiness']
+        townhall.population = tile_data['population']
+        townhall.open_positions = tile_data['open_positions']
+        townhall.build_time = tile_data['build_time']
+        townhall.remaining_time = tile_data['remaining_time']
+        townhall.built = tile_data['built']
+        return townhall
 
     return None
 
@@ -172,6 +182,8 @@ def load_game(slot_number=1):
         x = building_data['x']
         y = building_data['y']
         logic.buildings.append((building, x, y))
+
+    logic.rebuild_buildings_from_grid()
 
     print(f'Игра загружена из {save_path}')
     return True

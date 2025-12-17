@@ -41,6 +41,7 @@ class GameView(arcade.View):
         self.road = 'Road'
         vertical_road = 'Road (vertical)'
         horizontal_road = 'Road (horizontal)'
+        self.townhall = 'TownHall'
         self.road_types = [vertical_road, horizontal_road]
 
         # Settings button
@@ -81,6 +82,7 @@ class GameView(arcade.View):
             logic.House: arcade.load_texture("assets/maps/Tiles/tile_0027.png"),
             logic.Store: arcade.load_texture("assets/maps/Tiles/tile_0046.png"),
             logic.Factory: arcade.load_texture("assets/maps/Tiles/tile_0083.png"),
+            logic.TownHall: arcade.load_texture("assets/maps/Tiles/tile_0014.png"),
         }
 
     def on_draw(self) -> None:
@@ -93,7 +95,7 @@ class GameView(arcade.View):
         arcade.draw_text(f"Selected: {self.picked_placeable if self.picked_placeable else 'None'}",
                          20, 80, arcade.color.BLACK, 20)
         arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.BLACK, 20)
-        arcade.draw_text(f"City Profit: {logic.city_profit}$", 20, 140, arcade.color.BLACK, 20)
+        arcade.draw_text(f"City Profit: {logic.city_profit}$/h", 20, 140, arcade.color.BLACK, 20)
 
         # Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
@@ -125,6 +127,9 @@ class GameView(arcade.View):
             self.picked_placeable = self.store
         elif symbol == arcade.key.F:
             self.picked_placeable = self.factory
+        elif symbol == arcade.key.T and logic.city_population >= 0 and logic.city_happiness >= 0:
+            self.picked_placeable = self.townhall
+
         elif symbol == arcade.key.R:
             self.picked_placeable = self.road_types[0]
 
@@ -184,6 +189,9 @@ class GameView(arcade.View):
             elif self.picked_placeable == self.road_types[1]:
                 placeable = logic.HorizontalRoad
                 sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
+            elif self.picked_placeable == self.townhall:
+                placeable = logic.TownHall
+                sprite = arcade.Sprite(self.construction_texture, scale=2)
             else:
                 return
 
@@ -192,7 +200,8 @@ class GameView(arcade.View):
             if result == 'placed':
                 sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
-                self.scene.add_sprite('Object', sprite)
+                if placeable != logic.TownHall:
+                    self.scene.add_sprite('Object', sprite)
             elif result == 'occupied':
                 self.show_warning = True
                 self.warning_timer = time.time()
@@ -207,8 +216,10 @@ class GameView(arcade.View):
             elif result == 'tree_removed':
                 sprites = arcade.get_sprites_at_point((x, y), self.scene['Tree'])
 
-                for sprite in sprites:
-                    sprite.remove_from_sprite_lists()
+            for sprite in sprites:
+                sprite.remove_from_sprite_lists()
+
+
 
 
 
@@ -254,6 +265,8 @@ class GameView(arcade.View):
                     sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
                 elif isinstance(cell, logic.Industrial):
                     sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
+                elif isinstance(cell, logic.TownHall):
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0014.png", scale=2)
 
                 if sprite:
                     sprite.center_x = self.offset_x + x * tile_size + tile_size / 2

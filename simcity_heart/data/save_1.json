@@ -1,17 +1,17 @@
 {
   "city": {
-    "money": -5160,
-    "happiness": 12.539999999999967,
-    "population": 38,
-    "house_count": 4,
-    "store_count": 2,
-    "factory_count": 0,
-    "city_jobs": 12
+    "money": 518118,
+    "happiness": 80.73170731707317,
+    "population": 54,
+    "house_count": 6,
+    "store_count": 4,
+    "factory_count": 3,
+    "city_jobs": 76
   },
   "demand": {
-    "residential": -25.380000000000003,
-    "commercial": -1.399999999999999,
-    "industrial": 32.9
+    "residential": 26.03658536585366,
+    "commercial": 7.000000000000002,
+    "industrial": 1.5
   },
   "grid": [
     [
@@ -228,28 +228,150 @@
       null,
       null,
       null,
+      null,
+      null,
+      null,
+      null,
       {
-        "type": "Commercial",
-        "name": "Commercial Zone"
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "Store",
+        "name": "Store",
+        "income": 15,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 3,
+        "build_time": 15,
+        "remaining_time": -0.003707399941049516,
+        "built": true
       },
       {
         "type": "Store",
         "name": "Store",
-        "income": 13,
+        "income": 15,
         "happiness": 0.05,
         "population": 0,
-        "open_positions": 6,
+        "open_positions": 5,
         "build_time": 15,
-        "remaining_time": -0.010195699986070395,
+        "remaining_time": -0.0044015999883413315,
         "built": true
       },
       {
-        "type": "Commercial",
-        "name": "Commercial Zone"
+        "type": "Store",
+        "name": "Store",
+        "income": 12,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 3,
+        "build_time": 15,
+        "remaining_time": -0.012752500013448298,
+        "built": true
       },
       {
-        "type": "Commercial",
-        "name": "Commercial Zone"
+        "type": "Store",
+        "name": "Store",
+        "income": 12,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 10,
+        "build_time": 15,
+        "remaining_time": -0.0047651000786572695,
+        "built": true
+      },
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
+      },
+      {
+        "type": "HorizontalRoad",
+        "name": "Horizontal Road"
       },
       {
         "type": "VerticalRoad",
@@ -284,68 +406,27 @@
       null,
       null,
       null,
-      null,
-      null,
-      null,
       {
-        "type": "Commercial",
-        "name": "Commercial Zone"
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 10,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.013656700029969215,
+        "built": true
       },
       {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "Commercial",
-        "name": "Commercial Zone"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 7,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.012167600099928677,
+        "built": true
       },
       {
         "type": "House",
@@ -355,7 +436,18 @@
         "population": 8,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.005682999966666102,
+        "remaining_time": -0.013784800074063241,
+        "built": true
+      },
+      {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 9,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.010865799966268241,
         "built": true
       },
       {
@@ -366,9 +458,61 @@
         "population": 10,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.006531700026243925,
+        "remaining_time": -0.008813600055873394,
         "built": true
       },
+      {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 10,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.01643570000305772,
+        "built": true
+      },
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       {
         "type": "VerticalRoad",
         "name": "Vertical Road"
@@ -406,471 +550,367 @@
       null,
       null,
       {
-        "type": "Store",
-        "name": "Store",
-        "income": 13,
-        "happiness": 0.05,
+        "type": "Tree",
+        "name": "Tree"
+      },
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      {
+        "type": "Tree",
+        "name": "Tree"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "Tree",
+        "name": "Tree"
+      },
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      null,
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 34,
+        "happiness": 0.0,
         "population": 0,
-        "open_positions": 6,
-        "build_time": 15,
-        "remaining_time": -0.00126369995996356,
+        "open_positions": 20,
+        "build_time": 20,
+        "remaining_time": -0.0035060999216511846,
         "built": true
       },
       {
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "Tree",
+        "name": "Tree"
+      },
+      null,
+      {
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
       {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.0002277999883517623,
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 33,
+        "happiness": 0.0,
+        "population": 0,
+        "open_positions": 16,
+        "build_time": 20,
+        "remaining_time": -0.015988500090315938,
         "built": true
       },
       {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.00744380010291934,
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      {
+        "type": "Water",
+        "name": "Water"
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
+      {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 25,
+        "happiness": 0.0,
+        "population": 0,
+        "open_positions": 19,
+        "build_time": 20,
+        "remaining_time": -0.01609330007340759,
         "built": true
       },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "Commercial",
-        "name": "Commercial Zone"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "Tree",
-        "name": "Tree"
-      },
-      {
-        "type": "Commercial",
-        "name": "Commercial Zone"
-      },
-      {
-        "type": "Commercial",
-        "name": "Commercial Zone"
-      },
-      {
-        "type": "Commercial",
-        "name": "Commercial Zone"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      {
-        "type": "Tree",
-        "name": "Tree"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "Tree",
-        "name": "Tree"
-      },
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "Tree",
-        "name": "Tree"
-      },
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      {
-        "type": "Water",
-        "name": "Water"
-      },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    ],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      null,
       null,
       {
         "type": "Tree",
@@ -1138,55 +1178,10 @@
         "name": "House",
         "income": 0,
         "happiness": 0.01,
-        "population": 8,
+        "population": 9,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.005682999966666102,
-        "built": true
-      },
-      "x": 15,
-      "y": 7
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.006531700026243925,
-        "built": true
-      },
-      "x": 16,
-      "y": 7
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.00744380010291934,
-        "built": true
-      },
-      "x": 16,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "Store",
-        "name": "Store",
-        "income": 13,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 6,
-        "build_time": 15,
-        "remaining_time": -0.00126369995996356,
+        "remaining_time": -0.010865799966268241,
         "built": true
       },
       "x": 13,
@@ -1198,30 +1193,180 @@
         "name": "House",
         "income": 0,
         "happiness": 0.01,
+        "population": 7,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.012167600099928677,
+        "built": true
+      },
+      "x": 11,
+      "y": 8
+    },
+    {
+      "building": {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 8,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.013784800074063241,
+        "built": true
+      },
+      "x": 12,
+      "y": 8
+    },
+    {
+      "building": {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
         "population": 10,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.0002277999883517623,
+        "remaining_time": -0.013656700029969215,
         "built": true
       },
-      "x": 15,
+      "x": 10,
       "y": 8
     },
     {
       "building": {
         "type": "Store",
         "name": "Store",
-        "income": 13,
+        "income": 12,
         "happiness": 0.05,
         "population": 0,
-        "open_positions": 6,
+        "open_positions": 3,
         "build_time": 15,
-        "remaining_time": -0.010195699986070395,
+        "remaining_time": -0.012752500013448298,
+        "built": true
+      },
+      "x": 12,
+      "y": 6
+    },
+    {
+      "building": {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 34,
+        "happiness": 0.0,
+        "population": 0,
+        "open_positions": 20,
+        "build_time": 20,
+        "remaining_time": -0.0035060999216511846,
+        "built": true
+      },
+      "x": 19,
+      "y": 15
+    },
+    {
+      "building": {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 25,
+        "happiness": 0.0,
+        "population": 0,
+        "open_positions": 19,
+        "build_time": 20,
+        "remaining_time": -0.01609330007340759,
+        "built": true
+      },
+      "x": 19,
+      "y": 17
+    },
+    {
+      "building": {
+        "type": "Factory",
+        "name": "Factory",
+        "income": 33,
+        "happiness": 0.0,
+        "population": 0,
+        "open_positions": 16,
+        "build_time": 20,
+        "remaining_time": -0.015988500090315938,
+        "built": true
+      },
+      "x": 19,
+      "y": 16
+    },
+    {
+      "building": {
+        "type": "Store",
+        "name": "Store",
+        "income": 15,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 3,
+        "build_time": 15,
+        "remaining_time": -0.003707399941049516,
+        "built": true
+      },
+      "x": 10,
+      "y": 6
+    },
+    {
+      "building": {
+        "type": "Store",
+        "name": "Store",
+        "income": 12,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 10,
+        "build_time": 15,
+        "remaining_time": -0.0047651000786572695,
+        "built": true
+      },
+      "x": 13,
+      "y": 6
+    },
+    {
+      "building": {
+        "type": "Store",
+        "name": "Store",
+        "income": 15,
+        "happiness": 0.05,
+        "population": 0,
+        "open_positions": 5,
+        "build_time": 15,
+        "remaining_time": -0.0044015999883413315,
+        "built": true
+      },
+      "x": 11,
+      "y": 6
+    },
+    {
+      "building": {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 10,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.008813600055873394,
         "built": true
       },
       "x": 14,
-      "y": 5
+      "y": 8
+    },
+    {
+      "building": {
+        "type": "House",
+        "name": "House",
+        "income": 0,
+        "happiness": 0.01,
+        "population": 10,
+        "open_positions": 0,
+        "build_time": 10,
+        "remaining_time": -0.01643570000305772,
+        "built": true
+      },
+      "x": 15,
+      "y": 8
     }
   ],
-  "timestamp": 1765990223.2422755
+  "timestamp": 1766003331.457008
 }
