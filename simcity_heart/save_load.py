@@ -5,17 +5,14 @@ import logic
 
 
 def serialize_tile(tile):
-    """Преобразует объект тайла в словарь для JSON"""
     if tile is None:
         return None
 
-    # Получаем имя класса и сохраняем его
     tile_data = {
         'type': tile.__class__.__name__,
         'name': tile.name
     }
 
-    # Для зданий сохраняем дополнительные данные
     if isinstance(tile, logic.Building):
         tile_data.update({
             'income': tile.income,
@@ -31,13 +28,11 @@ def serialize_tile(tile):
 
 
 def deserialize_tile(tile_data):
-    """Восстанавливает объект тайла из словаря"""
     if tile_data is None:
         return None
 
     tile_type = tile_data['type']
 
-    # Создаем соответствующий объект
     if tile_type == 'VerticalRoad':
         return logic.VerticalRoad()
     elif tile_type == 'HorizontalRoad':
@@ -97,14 +92,11 @@ def deserialize_tile(tile_data):
 
 
 def save_game(slot_number=1):
-    """Сохраняет игру в JSON файл"""
-    # Сериализуем grid
     serialized_grid = []
     for row in logic.grid:
         serialized_row = [serialize_tile(tile) for tile in row]
         serialized_grid.append(serialized_row)
 
-    # Сериализуем buildings
     serialized_buildings = []
     for building, x, y in logic.buildings:
         serialized_buildings.append({
@@ -133,8 +125,7 @@ def save_game(slot_number=1):
         "timestamp": time.time()
     }
 
-    # Создаем папку data если её нет
-    save_dir = Path('data')
+    save_dir = Path('data/worlds')
     save_dir.mkdir(exist_ok=True)
 
     save_path = save_dir / f'save_{slot_number}.json'
@@ -146,8 +137,7 @@ def save_game(slot_number=1):
 
 
 def load_game(slot_number=1):
-    """Загружает игру из JSON файла"""
-    save_path = Path('data') / f'save_{slot_number}.json'
+    save_path = Path('data/worlds') / f'save_{slot_number}.json'
 
     if not save_path.exists():
         print(f'Файл сохранения {save_path} не найден')
@@ -155,7 +145,6 @@ def load_game(slot_number=1):
 
     with open(save_path, 'r', encoding='utf-8') as f:
         save_data = json.load(f)
-    # Восстанавливаем city данные
     logic.city_money = save_data['city']['money']
     logic.city_happiness = save_data['city']['happiness']
     logic.city_population = save_data['city']['population']
@@ -164,18 +153,15 @@ def load_game(slot_number=1):
     logic.factory_count = save_data['city']['factory_count']
     logic.city_jobs = save_data['city']['city_jobs']
 
-    # Восстанавливаем demand
     logic.residential_demand = save_data['demand']['residential']
     logic.commercial_demand = save_data['demand']['commercial']
     logic.industrial_demand = save_data['demand']['industrial']
 
-    # Восстанавливаем grid
     logic.grid = []
     for row_data in save_data['grid']:
         row = [deserialize_tile(tile_data) for tile_data in row_data]
         logic.grid.append(row)
 
-    # Восстанавливаем buildings
     logic.buildings = []
     for building_data in save_data['buildings']:
         building = deserialize_tile(building_data['building'])
