@@ -50,7 +50,7 @@ def load_config():
     global volume, current_resolution_index
 
     if not CONFIG_PATH.exists():
-        return  # первый запуск — берём дефолт
+        return  
 
     with open(CONFIG_PATH, "r") as f:
         data = json.load(f)
