@@ -1,7 +1,7 @@
 # Controls
 
 # Klaviatuuri juhtimine
-Hoonete valimine
+- Hoonete valimine
 
 Klaviatuuri abil saad valida, millist objekti ehitada:
 
@@ -16,7 +16,7 @@ T – raekoda (Town Hall)
 
 R – tee (Road)
 
-Tee suuna muutmine
+- Tee suuna muutmine
 
 Kui tee on valitud:
 
