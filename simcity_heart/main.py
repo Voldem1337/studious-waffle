@@ -9,7 +9,7 @@ window = arcade.Window(height=720, width=1280, title='SimCity')
 window.center_window()
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
-
+da
 
 class MainView(arcade.View):
     def __init__(self,music_player):
