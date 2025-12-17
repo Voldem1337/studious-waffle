@@ -1,4 +1,5 @@
 import random
+from datetime import datetime, timedelta
 
 # STARTING DATA
 city_money = 10000
@@ -16,6 +17,22 @@ factory_count = 0
 residential_demand = 0
 commercial_demand = 0
 industrial_demand = 0
+
+GAME_START_DATE = datetime(2025, 1, 1)
+game_time_hours = 0.0
+
+def update_time(delta_time):
+    global game_time_hours
+    game_time_hours += delta_time # 1 sec = 1 game hour
+
+def get_game_date():
+    return GAME_START_DATE + timedelta(hours=game_time_hours)
+
+def get_date_string():
+    return get_game_date().strftime("%d.%m.%Y")
+
+
+
 
 
 # THE GRID
@@ -68,6 +85,7 @@ class Water(Placeable):
 class Tree(Placeable):
     def __init__(self):
         super().__init__('Tree')
+        self.removal_cost = 500
 
 #Drawing the starting location
 for y in range(len(grid)):
@@ -175,6 +193,25 @@ def try_placing_placeable(x, y, placeable):
 
     grid[y][x] = placeable
     return "placed"
+
+def try_removing_object(x, y):
+    global city_money
+    tile = grid[y][x]
+
+    if tile is None:
+        return 'tile_is_none'
+
+    if isinstance(tile, Tree):
+        city_money = city_money - tile.removal_cost
+        print('Tree removed, 500$ spent')
+        grid[y][x] = None
+        return 'tree_removed'
+
+    #remove object
+    grid[y][x] = None
+    return 'removed'
+
+
 
 
 def try_building_in_zone(x, y):

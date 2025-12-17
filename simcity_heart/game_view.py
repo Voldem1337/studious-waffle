@@ -86,12 +86,14 @@ class GameView(arcade.View):
     def on_draw(self) -> None:
         self.clear()
         self.scene.draw()
-        arcade.draw_text(f"Money: {logic.city_money}", 20, 20, arcade.color.WHITE, 20)
-        arcade.draw_text(f"Happiness: {int(logic.city_happiness)}", 20, 50, arcade.color.WHITE, 20)
+        # Parameters
+        arcade.draw_text(f"Date: {logic.get_date_string()}", 10, self.window_height - 30, arcade.color.BLACK, 18)
+        arcade.draw_text(f"Money: {logic.city_money}$", 20, 20, arcade.color.BLACK, 20)
+        arcade.draw_text(f"Happiness: {int(logic.city_happiness)}%", 20, 50, arcade.color.BLACK, 20)
         arcade.draw_text(f"Selected: {self.picked_placeable if self.picked_placeable else 'None'}",
-                         20, 80, arcade.color.WHITE, 20)
-        arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
-        arcade.draw_text(f"City Profit: {logic.city_profit}", 20, 140, arcade.color.WHITE, 20)
+                         20, 80, arcade.color.BLACK, 20)
+        arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.BLACK, 20)
+        arcade.draw_text(f"City Profit: {logic.city_profit}$", 20, 140, arcade.color.BLACK, 20)
 
         # Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
@@ -126,36 +128,42 @@ class GameView(arcade.View):
         elif symbol == arcade.key.R:
             self.picked_placeable = self.road_types[0]
 
-    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
         if self.picked_placeable == self.road_types[0]:
-            if button == arcade.MOUSE_BUTTON_RIGHT:
+            if symbol == arcade.key.UP:
                 self.picked_placeable = self.road_types[1]
-        else:
-            if button == arcade.MOUSE_BUTTON_RIGHT:
+            elif symbol == arcade.key.DOWN:
+                self.picked_placeable = self.road_types[1]
+
+        elif self.picked_placeable == self.road_types[1]:
+            if symbol == arcade.key.UP:
+                self.picked_placeable = self.road_types[0]
+            elif symbol == arcade.key.DOWN:
                 self.picked_placeable = self.road_types[0]
 
-        if button != arcade.MOUSE_BUTTON_LEFT:
-            return
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
 
-        if self.show_settings:
-            if self.window_middle_x - 138 <= x <= self.window_middle_x - 35 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
-                save_load.save_game()
-                from main import MainView
-                # Музыка уже играет через config.music_player
-                game = MainView()
-                self.window.show_view(game)
-            elif self.window_middle_x + 74 <= x <= self.window_middle_x + 128 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
-                self.show_settings = False
-                self.clear()
-        else:
-            if self.settings_gear.collides_with_point((x, y)):
-                self.show_settings = True
-                return
+        tile_size = 16 * 2
+        grid_x = int((x - self.offset_x) / tile_size)
+        grid_y = int((y - self.offset_y) / tile_size)
 
-            # Placing a zone
-            tile_size = 16 * 2
-            grid_x = int((x - self.offset_x) / tile_size)
-            grid_y = int((y - self.offset_y) / tile_size)
+        if button == arcade.MOUSE_BUTTON_LEFT:
+
+            if self.show_settings:
+                if self.window_middle_x - 138 <= x <= self.window_middle_x - 35 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
+                    save_load.save_game()
+                    from main import MainView
+                    # Музыка уже играет через config.music_player
+                    game = MainView()
+                    self.window.show_view(game)
+                elif self.window_middle_x + 74 <= x <= self.window_middle_x + 128 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
+                    self.show_settings = False
+                    self.clear()
+            else:
+                if self.settings_gear.collides_with_point((x, y)):
+                    self.show_settings = True
+                    return
+
+
 
             # Check bounds before placing
             if not (0 <= grid_x < len(logic.grid[0]) and 0 <= grid_y < len(logic.grid) + 1):
@@ -191,8 +199,20 @@ class GameView(arcade.View):
             elif result == 'no_money':
                 print('not enough money')
 
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            result = logic.try_removing_object(grid_x, grid_y)
+
+            if result == 'removed':
+                sprites = arcade.get_sprites_at_point((x, y), self.scene['Object'])
+            elif result == 'tree_removed':
+                sprites = arcade.get_sprites_at_point((x, y), self.scene['Tree'])
+
+                for sprite in sprites:
+                    sprite.remove_from_sprite_lists()
+
+
+
     def rebuild_scene_from_logic(self):
-        """Восстанавливает визуальные спрайты из логического grid после загрузки"""
         tile_size = 16 * 2
         tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
@@ -219,6 +239,7 @@ class GameView(arcade.View):
                 sprite = None
                 if isinstance(cell, logic.House):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=2)
+
                 elif isinstance(cell, logic.Store):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=2)
                 elif isinstance(cell, logic.Factory):
@@ -237,9 +258,11 @@ class GameView(arcade.View):
                 if sprite:
                     sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
                     sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
-                    self.scene.add_sprite("Zone", sprite)
+                    self.scene.add_sprite("Object", sprite)
 
     def on_update(self, delta_time: float):
+        logic.update_time(delta_time)
+
         if time.time() - self.last_update_time > 1:
             logic.update_city()
             self.last_update_time = time.time()
