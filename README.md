@@ -4,14 +4,14 @@ See projekt on SimCity-stiilis linnasimulaator, mis on arendatud Pythonis, kasut
 
 # Ehitus ja kaart
 
-Linn koosneb grid-põhisest kaardist
+- Linn koosneb grid-põhisest kaardist
 
-Iga ruut võib sisaldada ühte objekti
+- Iga ruut võib sisaldada ühte objekti
 
 Hooneid saab:
 
-ehitada
+- ehitada
 
-eemaldada (paremklõps)
+- eemaldada (paremklõps)
 
-Ehitamine on piiratud kaardi suurusega
+- Ehitamine on piiratud kaardi suurusega
