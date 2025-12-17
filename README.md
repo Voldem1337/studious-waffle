@@ -24,6 +24,14 @@ Muu
 
 - ESC – sulgeb mängu kohe
 
+# Hiire juhtimine
+
+- Vasak hiirenupp (LMB) - Ehita valitud hoone kaardile
+
+- Parem hiirenupp (RMB) - Eemalda hoone või objekt kaardilt
+
+Ava Settings menüü, kui klikid ⚙️ ikoonile paremas ülanurgas
+
 # Projekti kirjeldus
 
 See projekt on SimCity-stiilis linnasimulaator, mis on arendatud Pythonis, kasutades Arcade teeki. Mängija ehitab linna ruudustikupõhisel kaardil, paigutades erinevaid hooneid, hallates raha, elanikkonda, õnne (happiness) ja hoolduskulusid.
