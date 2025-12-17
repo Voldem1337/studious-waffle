@@ -118,7 +118,10 @@ class GameView(arcade.View):
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
-            self.window.close()
+            if not self.show_settings:
+                self.show_settings = True
+            else:
+                self.show_settings = False
 
         # Picking a zone through pressing on keyboard
         if symbol == arcade.key.H:
