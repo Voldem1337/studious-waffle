@@ -1,17 +1,17 @@
 {
   "city": {
-    "money": 518118,
-    "happiness": 80.73170731707317,
-    "population": 54,
-    "house_count": 6,
-    "store_count": 4,
-    "factory_count": 3,
-    "city_jobs": 76
+    "money": 10000,
+    "happiness": 48.75,
+    "population": 0,
+    "house_count": 0,
+    "store_count": 0,
+    "factory_count": 0,
+    "city_jobs": 0
   },
   "demand": {
-    "residential": 26.03658536585366,
-    "commercial": 7.000000000000002,
-    "industrial": 1.5
+    "residential": 2.5,
+    "commercial": 0,
+    "industrial": 0
   },
   "grid": [
     [
@@ -265,50 +265,10 @@
       null,
       null,
       null,
-      {
-        "type": "Store",
-        "name": "Store",
-        "income": 15,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 3,
-        "build_time": 15,
-        "remaining_time": -0.003707399941049516,
-        "built": true
-      },
-      {
-        "type": "Store",
-        "name": "Store",
-        "income": 15,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 5,
-        "build_time": 15,
-        "remaining_time": -0.0044015999883413315,
-        "built": true
-      },
-      {
-        "type": "Store",
-        "name": "Store",
-        "income": 12,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 3,
-        "build_time": 15,
-        "remaining_time": -0.012752500013448298,
-        "built": true
-      },
-      {
-        "type": "Store",
-        "name": "Store",
-        "income": 12,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 10,
-        "build_time": 15,
-        "remaining_time": -0.0047651000786572695,
-        "built": true
-      },
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -345,34 +305,13 @@
       null,
       null,
       null,
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
-      {
-        "type": "HorizontalRoad",
-        "name": "Horizontal Road"
-      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       {
         "type": "VerticalRoad",
         "name": "Vertical Road"
@@ -406,72 +345,12 @@
       null,
       null,
       null,
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.013656700029969215,
-        "built": true
-      },
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 7,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.012167600099928677,
-        "built": true
-      },
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 8,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.013784800074063241,
-        "built": true
-      },
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 9,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.010865799966268241,
-        "built": true
-      },
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.008813600055873394,
-        "built": true
-      },
-      {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.01643570000305772,
-        "built": true
-      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       {
         "type": "VerticalRoad",
@@ -779,17 +658,7 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 34,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 20,
-        "build_time": 20,
-        "remaining_time": -0.0035060999216511846,
-        "built": true
-      },
+      null,
       {
         "type": "Water",
         "name": "Water"
@@ -841,17 +710,7 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 33,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 16,
-        "build_time": 20,
-        "remaining_time": -0.015988500090315938,
-        "built": true
-      },
+      null,
       {
         "type": "Water",
         "name": "Water"
@@ -900,17 +759,7 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 25,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 19,
-        "build_time": 20,
-        "remaining_time": -0.01609330007340759,
-        "built": true
-      },
+      null,
       null,
       {
         "type": "Tree",
@@ -1171,202 +1020,6 @@
       null
     ]
   ],
-  "buildings": [
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 9,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.010865799966268241,
-        "built": true
-      },
-      "x": 13,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 7,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.012167600099928677,
-        "built": true
-      },
-      "x": 11,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 8,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.013784800074063241,
-        "built": true
-      },
-      "x": 12,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.013656700029969215,
-        "built": true
-      },
-      "x": 10,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "Store",
-        "name": "Store",
-        "income": 12,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 3,
-        "build_time": 15,
-        "remaining_time": -0.012752500013448298,
-        "built": true
-      },
-      "x": 12,
-      "y": 6
-    },
-    {
-      "building": {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 34,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 20,
-        "build_time": 20,
-        "remaining_time": -0.0035060999216511846,
-        "built": true
-      },
-      "x": 19,
-      "y": 15
-    },
-    {
-      "building": {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 25,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 19,
-        "build_time": 20,
-        "remaining_time": -0.01609330007340759,
-        "built": true
-      },
-      "x": 19,
-      "y": 17
-    },
-    {
-      "building": {
-        "type": "Factory",
-        "name": "Factory",
-        "income": 33,
-        "happiness": 0.0,
-        "population": 0,
-        "open_positions": 16,
-        "build_time": 20,
-        "remaining_time": -0.015988500090315938,
-        "built": true
-      },
-      "x": 19,
-      "y": 16
-    },
-    {
-      "building": {
-        "type": "Store",
-        "name": "Store",
-        "income": 15,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 3,
-        "build_time": 15,
-        "remaining_time": -0.003707399941049516,
-        "built": true
-      },
-      "x": 10,
-      "y": 6
-    },
-    {
-      "building": {
-        "type": "Store",
-        "name": "Store",
-        "income": 12,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 10,
-        "build_time": 15,
-        "remaining_time": -0.0047651000786572695,
-        "built": true
-      },
-      "x": 13,
-      "y": 6
-    },
-    {
-      "building": {
-        "type": "Store",
-        "name": "Store",
-        "income": 15,
-        "happiness": 0.05,
-        "population": 0,
-        "open_positions": 5,
-        "build_time": 15,
-        "remaining_time": -0.0044015999883413315,
-        "built": true
-      },
-      "x": 11,
-      "y": 6
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.008813600055873394,
-        "built": true
-      },
-      "x": 14,
-      "y": 8
-    },
-    {
-      "building": {
-        "type": "House",
-        "name": "House",
-        "income": 0,
-        "happiness": 0.01,
-        "population": 10,
-        "open_positions": 0,
-        "build_time": 10,
-        "remaining_time": -0.01643570000305772,
-        "built": true
-      },
-      "x": 15,
-      "y": 8
-    }
-  ],
-  "timestamp": 1766003331.457008
+  "buildings": [],
+  "timestamp": 1766008749.9989674
 }
