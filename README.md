@@ -99,6 +99,8 @@ Linnaseisundit saab salvestada ja laadida, kuid see praegu ei tööta ideaalselt
 
 # Tulevikuplaanid (ideed)
 
+- Rohkem hoonete tüüpe
+
 - Animatsioonid
 
 - Täpsem õnne ja saaste süsteem
