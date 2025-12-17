@@ -128,7 +128,7 @@ def save_game(slot_number=1):
 
 
 def load_game(slot_number=1):
-    save_path = Path('data') / f'save_{slot_number}.json'
+    save_path = Path('data/worlds') / f'save_{slot_number}.json'
 
     if not save_path.exists():
         print(f'Файл сохранения {save_path} не найден')
