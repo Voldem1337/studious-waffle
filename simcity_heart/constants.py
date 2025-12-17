@@ -7,4 +7,3 @@ SCREEN_HEIGHT = None
 city_money = 10000
 city_happiness = 50
 city_popullation = 0
-
