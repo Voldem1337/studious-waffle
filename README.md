@@ -1,3 +1,31 @@
+# Controls
+
+# Klaviatuuri juhtimine
+Hoonete valimine
+
+Klaviatuuri abil saad valida, millist objekti ehitada:
+
+H – elamuala (House / Residential)
+
+S – äriala (Store / Commercial)
+
+F – tööstusala (Factory / Industrial)
+
+T – raekoda (Town Hall)
+(saadaval ainult siis, kui linna seisund seda lubab)
+
+R – tee (Road)
+
+Tee suuna muutmine
+
+Kui tee on valitud:
+
+↑ / ↓ (UP / DOWN) – vahetab vertikaalse ja horisontaalse tee vahel
+
+Muu
+
+ESC – sulgeb mängu kohe
+
 # Projekti kirjeldus
 
 See projekt on SimCity-stiilis linnasimulaator, mis on arendatud Pythonis, kasutades Arcade teeki. Mängija ehitab linna ruudustikupõhisel kaardil, paigutades erinevaid hooneid, hallates raha, elanikkonda, õnne (happiness) ja hoolduskulusid.
