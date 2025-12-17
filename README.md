@@ -1,30 +1,28 @@
 # Controls
 
 # Klaviatuuri juhtimine
-- Hoonete valimine
+Hoonete valimine
 
 Klaviatuuri abil saad valida, millist objekti ehitada:
 
-H – elamuala (House / Residential)
+- H – elamuala (House / Residential)
 
-S – äriala (Store / Commercial)
+- S – äriala (Store / Commercial)
 
-F – tööstusala (Factory / Industrial)
+- F – tööstusala (Factory / Industrial)
 
-T – raekoda (Town Hall)
+- T – raekoda (Town Hall)
 (saadaval ainult siis, kui linna seisund seda lubab)
 
-R – tee (Road)
+- R – tee (Road)
 
-- Tee suuna muutmine
+Tee suuna muutmine
 
-Kui tee on valitud:
-
-↑ / ↓ (UP / DOWN) – vahetab vertikaalse ja horisontaalse tee vahel
+- ↑ / ↓ (UP / DOWN) – vahetab vertikaalse ja horisontaalse tee vahel
 
 Muu
 
-ESC – sulgeb mängu kohe
+- ESC – sulgeb mängu kohe
 
 # Projekti kirjeldus
 
