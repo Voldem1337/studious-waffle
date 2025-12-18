@@ -132,7 +132,7 @@ def save_game(file):
     with open(save_path, 'w', encoding='utf-8') as f:
         json.dump(save_data, f, indent=2, ensure_ascii=False)
 
-    print(f'Игра сохранена в {save_path}')
+    print(f'Game is saved to {save_path}')
     return True
 
 
@@ -171,5 +171,5 @@ def load_game(file):
 
     logic.rebuild_buildings_from_grid()
 
-    print(f'Игра загружена из {save_path}')
+    print(f'Game is loaded from{save_path}')
     return True

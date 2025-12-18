@@ -3,7 +3,7 @@ from pathlib import Path
 import logic
 import time
 import save_load
-import config  # Импортируем настройки
+import config
 
 assets_path = Path().absolute().resolve() / Path('assets')
 arcade.resources.add_resource_handle('my-assets', assets_path)
