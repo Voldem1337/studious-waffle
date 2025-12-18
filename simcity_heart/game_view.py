@@ -356,10 +356,12 @@ class GameView(arcade.View):
             self.handle_X = max(min(x, right), left)
             config.load_config()
             config.set_effect_volume(int(((self.handle_X - left) / 350) * 100))
-            self.volume_text.text = f"Effect Volume: {config.effect_volume}%"
+            self.volume_text.text = f"Volume: {config.effect_volume}%"
 
     def _update_ui_positions(self):
         """Update UI positions after resolution change"""
+        config.load_config()
+        self.tile_map.scaling = config.current_resolution_index - self.tile_map.scaling
 
         self.window_width, self.window_height = self.window.get_size()
         self.window_middle_x = self.window.width / 2
