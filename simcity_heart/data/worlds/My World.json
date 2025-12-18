@@ -1,7 +1,7 @@
 {
   "city": {
     "money": 10000,
-    "happiness": 48.7804878048706,
+    "happiness": 48.78048780487804,
     "population": 0,
     "house_count": 0,
     "store_count": 0,
@@ -9,7 +9,7 @@
     "city_jobs": 0
   },
   "demand": {
-    "residential": 2.439024390258789,
+    "residential": 2.4390243902439117,
     "commercial": 0,
     "industrial": 0
   },
@@ -1021,5 +1021,5 @@
     ]
   ],
   "buildings": [],
-  "timestamp": 1766055138.8723812
+  "timestamp": 1766055947.919637
 }
