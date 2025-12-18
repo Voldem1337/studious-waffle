@@ -86,7 +86,7 @@ class GameView(arcade.View):
 
         self.settings_title = arcade.Text("SETTINGS", self.window_middle_x, self.window_middle_y + 250,
                                           arcade.color.WHITE, 35, anchor_x="center")
-        self.volume_text = arcade.Text(f"Effect Volume: {config.effect_volume}%", self.window_middle_x,
+        self.volume_text = arcade.Text(f"Effect volume: {config.effect_volume}%", self.window_middle_x,
                                        self.window_middle_y + 185, arcade.color.WHITE, 20, anchor_x="center")
         self.back_text = arcade.Text('BACK', self.window_middle_x - 150, self.window_middle_y - 150,
                                      arcade.color.WHITE, 20, anchor_x="center")
@@ -242,7 +242,9 @@ class GameView(arcade.View):
                 config.load_config()
                 config.set_effect_volume(int(((self.handle_X - self.left_handle_X) / 350) * 100))
                 self.volume_text.text = f"Effect volume: {config.effect_volume}%"
+                self.game_music_player.volume = config.effect_volume / 100
                 config.save_config()
+
                 return
 
             # BACK button
@@ -366,7 +368,9 @@ class GameView(arcade.View):
             self.handle_X = max(min(x, right), left)
             config.load_config()
             config.set_effect_volume(int(((self.handle_X - left) / 350) * 100))
-            self.volume_text.text = f"Volume: {config.effect_volume}%"
+            self.game_music_player.volume = config.effect_volume / 100
+            self.volume_text.text = f"Effect volume: {config.effect_volume}%"
+            config.save_config()
 
     def _update_ui_positions(self):
         """Update UI positions after resolution change"""
