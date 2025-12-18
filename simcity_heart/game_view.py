@@ -24,6 +24,10 @@ class GameView(arcade.View):
             loop=True
         )
 
+        # SOUND EFFECTS
+        self.build_sound = arcade.Sound("assets/sounds/impact-wood-impact-on-wood-heavy-03.wav")
+        self.remove_sound = arcade.Sound("assets/sounds/destruction-explosion-close-small-06.wav")
+
         # Loading the map
         self.tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
@@ -332,6 +336,8 @@ class GameView(arcade.View):
                 if placeable and sprite:
                     result = logic.try_placing_placeable(grid_x, grid_y, placeable)
                     if result == 'placed':
+                        self.build_sound.play(volume=config.effect_volume / 100)
+
                         sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
                         sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
                         if placeable != logic.TownHall:
@@ -347,8 +353,10 @@ class GameView(arcade.View):
                 result = logic.try_removing_object(grid_x, grid_y)
 
                 if result == 'removed':
+                    self.remove_sound = arcade.Sound("assets/sounds/remove.wav")
                     sprites = arcade.get_sprites_at_point((x, y), self.scene['Object'])
                 elif result == 'tree_removed':
+                    self.remove_sound = arcade.Sound("assets/sounds/remove.wav")
                     sprites = arcade.get_sprites_at_point((x, y), self.scene['Tree'])
                 else:
                     sprites = []
