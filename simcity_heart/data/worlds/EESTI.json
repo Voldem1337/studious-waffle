@@ -1,6 +1,6 @@
 {
   "city": {
-    "money": 47478,
+    "money": 56366,
     "happiness": 100,
     "population": 177,
     "house_count": 22,
@@ -2098,5 +2098,5 @@
       "y": 23
     }
   ],
-  "timestamp": 1766047652.1700218
+  "timestamp": 1766049551.153915
 }

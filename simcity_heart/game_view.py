@@ -11,7 +11,6 @@ arcade.resources.add_resource_handle('my-assets', assets_path)
 
 class GameView(arcade.View):
     def __init__(self):
-
         if config.music_player:
             config.music_player.pause()
 
@@ -48,40 +47,62 @@ class GameView(arcade.View):
         self.townhall = 'TownHall'
         self.road_types = [vertical_road, horizontal_road]
 
-        # Settings button
+        # UI elements
         self.ui_sprites = arcade.SpriteList()
-        # warning sign
         self.warning_list = arcade.SpriteList()
         self.warning_sprite = arcade.Sprite("assets/images/warning_bulding.png", scale=0.25)
         self.warning_sprite.center_x = self.window.width / 2
         self.warning_sprite.center_y = self.window.height / 2
         self.warning_list.append(self.warning_sprite)
-
         self.show_warning = False
 
+        # Settings gear button
         self.window_middle_x, self.window_middle_y = self.window.width / 2, self.window.height / 2
-        self.settings_gear = arcade.Sprite(
-            "assets/images/setting_bt.png",
-            scale=0.05
-        )
+        self.settings_gear = arcade.Sprite("assets/images/setting_bt.png", scale=0.05)
         margin = 20
         self.settings_gear.center_x = self.window.width - self.settings_gear.width / 2 - margin
         self.settings_gear.center_y = self.window.height - self.settings_gear.height / 2 - margin
-
         self.ui_sprites.append(self.settings_gear)
-        self.show_settings = False
-        self.label = arcade.Text("Are you sure?", self.window_middle_x, self.window_middle_y + 100, arcade.color.BLACK,
-                                 20, anchor_x="center")
-        self.yes = arcade.Text("[YES]", self.window_middle_x - 100, self.window_middle_y, arcade.color.RED, 20,
-                               anchor_x="center", anchor_y="center")
-        self.no = arcade.Text("[NO]", self.window_middle_x + 100, self.window_middle_y, arcade.color.DARK_GREEN, 20,
-                              anchor_x="center", anchor_y="center")
-        self.settings = arcade.Text("SETTINGS", self.window_middle_x, self.window_middle_y + 250, arcade.color.WHITE,
-                                    35, anchor_x="center")
 
+        # Settings window
+        self.show_settings = False
+        self.dragging = False
+        config.load_config()
+
+        # Volume slider
+        self.left_handle_X = self.window_middle_x - 200
+        self.handle_X = self.left_handle_X + 350 * (config.effect_volume / 100)
+
+        # Settings UI texts
+
+        self.settings_title = arcade.Text("SETTINGS", self.window_middle_x, self.window_middle_y + 250,
+                                          arcade.color.WHITE, 35, anchor_x="center")
+        self.volume_text = arcade.Text(f"Effect Volume: {config.effect_volume}%", self.window_middle_x,
+                                       self.window_middle_y + 185, arcade.color.WHITE, 20, anchor_x="center")
+        self.back_text = arcade.Text('BACK', self.window_middle_x - 150, self.window_middle_y - 150,
+                                     arcade.color.WHITE, 20, anchor_x="center")
+        self.save_exit_text = arcade.Text('SAVE & EXIT', self.window_middle_x + 150, self.window_middle_y - 150,
+                                          arcade.color.RED, 20, anchor_x="center")
+
+        # Resolution dropdown
+        self.resolutions = [
+            ("Fullscreen", None),
+            ("1920x1080", (1920, 1080)),
+            ("1600x900", (1600, 900)),
+            ("1280x720", (1280, 720))
+        ]
+        self.current_resolution_index = config.current_resolution_index
+        self.dropdown_open = False
+        self.dropdown_x = self.window_middle_x
+        self.dropdown_y = self.window_middle_y + 50
+        self.dropdown_width = 200
+        self.dropdown_height = 40
+        self.resolution_label = arcade.Text("Resolution:", self.dropdown_x - 200, self.dropdown_y + 10,
+                                            arcade.color.WHITE, 20)
+
+        # Building sprites
         self.building_sprites = {}
         self.construction_texture = arcade.load_texture("assets/maps/Tiles/tile_0012.png")
-
         self.final_textures = {
             logic.House: arcade.load_texture("assets/maps/Tiles/tile_0027.png"),
             logic.Store: arcade.load_texture("assets/maps/Tiles/tile_0046.png"),
@@ -92,7 +113,8 @@ class GameView(arcade.View):
     def on_draw(self) -> None:
         self.clear()
         self.scene.draw()
-        # Parameters
+
+        # Game UI
         arcade.draw_text(f"Date: {logic.get_date_string()}", 10, self.window_height - 30, arcade.color.BLACK, 18)
         arcade.draw_text(f"Money: {logic.city_money}$", 20, 20, arcade.color.BLACK, 20)
         arcade.draw_text(f"Happiness: {int(logic.city_happiness)}%", 20, 50, arcade.color.BLACK, 20)
@@ -108,137 +130,273 @@ class GameView(arcade.View):
         arcade.draw_text(f"{round(logic.industrial_demand, 2)}", self.window_width - 80, 80, arcade.color.YELLOW, 20)
 
         self.ui_sprites.draw()
+
+        # Settings window
         if self.show_settings:
+            # Dark overlay
             arcade.draw_lbwh_rectangle_filled(0, 0, self.window_width, self.window_height, (0, 0, 0, 200))
-            arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 150, self.window_middle_y - 50, 300, 200,
-                                              arcade.color.DARK_GRAY)
-            arcade.draw_lbwh_rectangle_outline(self.window_middle_x - 150, self.window_middle_y - 50, 300, 200,
-                                               arcade.color.WHITE, 3)
-            self.label.draw()
-            self.yes.draw()
-            self.no.draw()
+
+            # Settings panel
+            arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 300, self.window_middle_y - 250,
+                                              600, 600, arcade.color.DARK_GRAY)
+            arcade.draw_lbwh_rectangle_outline(self.window_middle_x - 300, self.window_middle_y - 250,
+                                               600, 600, arcade.color.WHITE, 3)
+
+            # Volume slider bar
+            arcade.draw_lbwh_rectangle_filled(self.window_middle_x - 200, self.window_middle_y + 125,
+                                              350, 5, arcade.color.LIGHT_GRAY)
+            # Volume slider handle
+            arcade.draw_circle_filled(self.handle_X, self.window_middle_y + 127, 10, arcade.color.GOLD)
+
+            # Draw texts
+            self.settings_title.draw()
+            self.volume_text.draw()
+            self.back_text.draw()
+            self.save_exit_text.draw()
+            self.resolution_label.draw()
+
+            # Resolution dropdown
+            current_res_name = self.resolutions[self.current_resolution_index][0]
+
+            # Dropdown button
+            arcade.draw_lbwh_rectangle_filled(self.dropdown_x + 25, self.dropdown_y,
+                                              self.dropdown_width, self.dropdown_height, arcade.color.DARK_GRAY)
+            arcade.draw_lbwh_rectangle_outline(self.dropdown_x + 25, self.dropdown_y,
+                                               self.dropdown_width, self.dropdown_height, arcade.color.WHITE, 2)
+            arcade.draw_text(current_res_name, self.dropdown_x + 35, self.dropdown_y + 12,
+                             arcade.color.WHITE, 16)
+
+            # Arrow
+            arrow = "▼" if not self.dropdown_open else "▲"
+            arcade.draw_text(arrow, self.dropdown_x + self.dropdown_width - 15, self.dropdown_y + 10,
+                             arcade.color.WHITE, 18)
+
+            # Dropdown options
+            if self.dropdown_open:
+                for i, (res_name, res_value) in enumerate(self.resolutions):
+                    option_y = self.dropdown_y - (i + 1) * self.dropdown_height
+                    bg_color = arcade.color.GRAY if i == self.current_resolution_index else arcade.color.DARK_GRAY
+
+                    arcade.draw_lbwh_rectangle_filled(self.dropdown_x + 25, option_y,
+                                                      self.dropdown_width, self.dropdown_height, bg_color)
+                    arcade.draw_lbwh_rectangle_outline(self.dropdown_x + 25, option_y,
+                                                       self.dropdown_width, self.dropdown_height, arcade.color.WHITE, 2)
+                    arcade.draw_text(res_name, self.dropdown_x + 35, option_y + 12, arcade.color.WHITE, 16)
+
+        # Warning
         if self.show_warning:
             self.warning_list.draw()
 
     def on_key_press(self, symbol: int, modifiers: int) -> None:
         if symbol == arcade.key.ESCAPE:
-            if not self.show_settings:
-                self.show_settings = True
-            else:
-                self.show_settings = False
+            self.show_settings = not self.show_settings
 
-        # Picking a zone through pressing on keyboard
-        if symbol == arcade.key.H:
-            self.picked_placeable = self.house
-        elif symbol == arcade.key.S:
-            self.picked_placeable = self.store
-        elif symbol == arcade.key.F:
-            self.picked_placeable = self.factory
-        elif symbol == arcade.key.T and logic.city_population >= 0 and logic.city_happiness >= 0:
-            self.picked_placeable = self.townhall
-
-        elif symbol == arcade.key.R:
-            self.picked_placeable = self.road_types[0]
-
-        if self.picked_placeable == self.road_types[0]:
-            if symbol == arcade.key.UP:
-                self.picked_placeable = self.road_types[1]
-            elif symbol == arcade.key.DOWN:
-                self.picked_placeable = self.road_types[1]
-
-        elif self.picked_placeable == self.road_types[1]:
-            if symbol == arcade.key.UP:
+        # Picking zones
+        if not self.show_settings:
+            if symbol == arcade.key.H:
+                self.picked_placeable = self.house
+            elif symbol == arcade.key.S:
+                self.picked_placeable = self.store
+            elif symbol == arcade.key.F:
+                self.picked_placeable = self.factory
+            elif symbol == arcade.key.T:
+                self.picked_placeable = self.townhall
+            elif symbol == arcade.key.R:
                 self.picked_placeable = self.road_types[0]
-            elif symbol == arcade.key.DOWN:
-                self.picked_placeable = self.road_types[0]
+
+            # Road rotation
+            if self.picked_placeable in self.road_types:
+                if symbol in [arcade.key.UP, arcade.key.DOWN]:
+                    current_index = self.road_types.index(self.picked_placeable)
+                    self.picked_placeable = self.road_types[1 - current_index]
 
     def on_mouse_press(self, x: float, y: float, button: int, modifiers: int) -> None:
+        if button != arcade.MOUSE_BUTTON_LEFT and button != arcade.MOUSE_BUTTON_RIGHT:
+            return
 
-        tile_size = 16 * 2
-        grid_x = int((x - self.offset_x) / tile_size)
-        grid_y = int((y - self.offset_y) / tile_size)
+        # Settings gear click
+        if button == arcade.MOUSE_BUTTON_LEFT and self.settings_gear.collides_with_point((x, y)):
+            self.show_settings = not self.show_settings
+            return
 
-        if button == arcade.MOUSE_BUTTON_LEFT:
-
-            if self.show_settings:
-                if self.window_middle_x - 138 <= x <= self.window_middle_x - 35 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
-                    config.load_config()
-                    save_load.save_game(config.current_world_name)
-                    config.music_player.play()
-                    from main import MainView
-                    game = MainView()
-                    self.window.show_view(game)
-                elif self.window_middle_x + 74 <= x <= self.window_middle_x + 128 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
-                    self.show_settings = False
-                    self.clear()
-            else:
-                if self.settings_gear.collides_with_point((x, y)):
-                    self.show_settings = True
-                    return
-
-
-
-            # Check bounds before placing
-            if not (0 <= grid_x < len(logic.grid[0]) and 0 <= grid_y < len(logic.grid) + 1):
+        # Settings window interactions
+        if self.show_settings and button == arcade.MOUSE_BUTTON_LEFT:
+            # Volume slider
+            if abs(x - self.handle_X) <= 15 and abs(y - (self.window_middle_y + 127)) <= 15:
+                self.dragging = True
                 return
 
-            if self.picked_placeable == self.house:
-                placeable = logic.Residential
-                sprite = arcade.Sprite(":my-assets:images/green_zone.png", scale=0.055)
-            elif self.picked_placeable == self.store:
-                placeable = logic.Commercial
-                sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
-            elif self.picked_placeable == self.factory:
-                placeable = logic.Industrial
-                sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
-            elif self.picked_placeable == self.road_types[0]:
-                placeable = logic.VerticalRoad
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
-            elif self.picked_placeable == self.road_types[1]:
-                placeable = logic.HorizontalRoad
-                sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
-            elif self.picked_placeable == self.townhall:
-                placeable = logic.TownHall
-                sprite = arcade.Sprite(self.construction_texture, scale=2)
-            else:
+            # Click on slider bar to jump
+            if (self.window_middle_x - 200 <= x <= self.window_middle_x + 150 and
+                    self.window_middle_y + 115 <= y <= self.window_middle_y + 140):
+                self.handle_X = x
+                config.load_config()
+                config.set_effect_volume(int(((self.handle_X - self.left_handle_X) / 350) * 100))
+                self.volume_text.text = f"Volume: {config.effect_volume}%"
+                config.save_config()
                 return
 
-            # Try placing the placeable in logic
-            result = logic.try_placing_placeable(grid_x, grid_y, placeable)
-            if result == 'placed':
-                sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
-                sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
-                if placeable != logic.TownHall:
-                    self.scene.add_sprite('Object', sprite)
-            elif result == 'occupied':
-                self.show_warning = True
-                self.warning_timer = time.time()
-            elif result == 'no_money':
-                print('not enough money')
+            # BACK button
+            if (self.window_middle_x - 186 <= x <= self.window_middle_x - 114 and
+                    self.window_middle_y - 165 <= y <= self.window_middle_y - 135):
+                self.show_settings = False
+                return
 
-        if button == arcade.MOUSE_BUTTON_RIGHT:
-            result = logic.try_removing_object(grid_x, grid_y)
+            # SAVE & EXIT button
+            if (self.window_middle_x + 74 <= x <= self.window_middle_x + 226 and
+                    self.window_middle_y - 165 <= y <= self.window_middle_y - 135):
+                config.load_config()
+                save_load.save_game(config.current_world_name)
+                from main import MainView
+                menu = MainView()
+                self.window.show_view(menu)
+                return
 
-            if result == 'removed':
-                sprites = arcade.get_sprites_at_point((x, y), self.scene['Object'])
-            elif result == 'tree_removed':
-                sprites = arcade.get_sprites_at_point((x, y), self.scene['Tree'])
+            # Dropdown toggle
+            if (self.dropdown_x + 25 <= x <= self.dropdown_x + 25 + self.dropdown_width and
+                    self.dropdown_y <= y <= self.dropdown_y + self.dropdown_height):
+                self.dropdown_open = not self.dropdown_open
+                return
 
-            for sprite in sprites:
-                sprite.remove_from_sprite_lists()
+            # Dropdown options
+            if self.dropdown_open:
+                for i, (res_name, res_value) in enumerate(self.resolutions):
+                    option_y = self.dropdown_y - (i + 1) * self.dropdown_height
 
+                    if (self.dropdown_x + 25 <= x <= self.dropdown_x + 25 + self.dropdown_width and
+                            option_y <= y <= option_y + self.dropdown_height):
 
+                        self.current_resolution_index = i
+                        config.current_resolution_index = i
+                        self.dropdown_open = False
 
+                        if res_value is None:
+                            self.window.set_fullscreen(True)
+                        else:
+                            self.window.set_fullscreen(False)
+                            self.window.set_size(res_value[0], res_value[1])
+                            self.window.center_window()
 
+                        self._update_ui_positions()
+                        return
+
+            # If clicked inside settings but not on any control, don't place buildings
+            if (self.window_middle_x - 300 <= x <= self.window_middle_x + 300 and
+                    self.window_middle_y - 250 <= y <= self.window_middle_y + 350):
+                return
+
+        # Building placement
+        if not self.show_settings:
+            tile_size = 16 * 2
+            grid_x = int((x - self.offset_x) / tile_size)
+            grid_y = int((y - self.offset_y) / tile_size)
+
+            # Check bounds
+            if not (0 <= grid_x < len(logic.grid[0]) and 0 <= grid_y < len(logic.grid)):
+                return
+
+            # Left click - place
+            if button == arcade.MOUSE_BUTTON_LEFT:
+                sprite = None
+                placeable = None
+
+                if self.picked_placeable == self.house:
+                    placeable = logic.Residential
+                    sprite = arcade.Sprite(":my-assets:images/green_zone.png", scale=0.055)
+                elif self.picked_placeable == self.store:
+                    placeable = logic.Commercial
+                    sprite = arcade.Sprite(":my-assets:images/blue_zone.png", scale=0.055)
+                elif self.picked_placeable == self.factory:
+                    placeable = logic.Industrial
+                    sprite = arcade.Sprite(":my-assets:images/yellow_zone.jpg", scale=0.055)
+                elif self.picked_placeable == self.road_types[0]:
+                    placeable = logic.VerticalRoad
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0144.png", scale=2)
+                elif self.picked_placeable == self.road_types[1]:
+                    placeable = logic.HorizontalRoad
+                    sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0110.png", scale=2)
+                elif self.picked_placeable == self.townhall:
+                    placeable = logic.TownHall
+                    sprite = arcade.Sprite(self.construction_texture, scale=2)
+
+                if placeable and sprite:
+                    result = logic.try_placing_placeable(grid_x, grid_y, placeable)
+                    if result == 'placed':
+                        sprite.center_x = self.offset_x + grid_x * tile_size + tile_size / 2
+                        sprite.center_y = self.offset_y + grid_y * tile_size + tile_size / 2
+                        if placeable != logic.TownHall:
+                            self.scene.add_sprite('Object', sprite)
+                    elif result == 'occupied':
+                        self.show_warning = True
+                        self.warning_timer = time.time()
+                    elif result == 'no_money':
+                        print('Not enough money!')
+
+            # Right click - remove
+            elif button == arcade.MOUSE_BUTTON_RIGHT:
+                result = logic.try_removing_object(grid_x, grid_y)
+
+                if result == 'removed':
+                    sprites = arcade.get_sprites_at_point((x, y), self.scene['Object'])
+                elif result == 'tree_removed':
+                    sprites = arcade.get_sprites_at_point((x, y), self.scene['Tree'])
+                else:
+                    sprites = []
+
+                for sprite in sprites:
+                    sprite.remove_from_sprite_lists()
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.dragging = False
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        if self.dragging:
+            left = self.left_handle_X
+            right = self.left_handle_X + 350
+            self.handle_X = max(min(x, right), left)
+            config.load_config()
+            config.set_effect_volume(int(((self.handle_X - left) / 350) * 100))
+            self.volume_text.text = f"Effect Volume: {config.effect_volume}%"
+
+    def _update_ui_positions(self):
+        """Update UI positions after resolution change"""
+
+        self.window_width, self.window_height = self.window.get_size()
+        self.window_middle_x = self.window.width / 2
+        self.window_middle_y = self.window.height / 2
+        self.map_width = self.tile_map.width * self.tile_map.tile_width * self.tile_map.scaling
+        self.map_height = self.tile_map.height * self.tile_map.tile_height * self.tile_map.scaling
+        self.window_width = self.window.width
+        self.window_height = self.window.height
+
+        self.settings_title.x = self.window_middle_x
+        self.settings_title.y = self.window_middle_y + 250
+
+        self.volume_text.x = self.window_middle_x
+        self.volume_text.y = self.window_middle_y + 185
+
+        self.back_text.x = self.window_middle_x - 150
+        self.back_text.y = self.window_middle_y - 150
+
+        self.save_exit_text.x = self.window_middle_x + 150
+        self.save_exit_text.y = self.window_middle_y - 150
+
+        self.dropdown_x = self.window_middle_x
+        self.dropdown_y = self.window_middle_y + 50
+
+        self.resolution_label.x = self.dropdown_x - 200
+        self.resolution_label.y = self.dropdown_y + 10
+
+        self.left_handle_X = self.window_middle_x - 200
+        self.handle_X = self.left_handle_X + 350 * (config.volume / 100)
 
     def rebuild_scene_from_logic(self):
+        """Rebuild scene from saved logic data"""
         tile_size = 16 * 2
         tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
         self.map_width = tile_map.width * tile_map.tile_width * tile_map.scaling
         self.map_height = tile_map.height * tile_map.tile_height * tile_map.scaling
-        self.window_width = self.window.width
-        self.window_height = self.window.height
 
         self.offset_x = self.window_width / 2 - self.map_width / 2
         self.offset_y = self.window_height / 2 - self.map_height / 2
@@ -258,7 +416,6 @@ class GameView(arcade.View):
                 sprite = None
                 if isinstance(cell, logic.House):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0027.png", scale=2)
-
                 elif isinstance(cell, logic.Store):
                     sprite = arcade.Sprite(":my-assets:maps/Tiles/tile_0046.png", scale=2)
                 elif isinstance(cell, logic.Factory):
@@ -288,21 +445,19 @@ class GameView(arcade.View):
             logic.update_city()
             self.last_update_time = time.time()
 
-        # Money and Happiness update every second
         finished = logic.update_construction(delta_time)
 
         for building, x, y in finished:
-            sprite = self.building_sprites[(x, y)]
-            sprite.texture = self.final_textures[type(building)]
+            if (x, y) in self.building_sprites:
+                sprite = self.building_sprites[(x, y)]
+                sprite.texture = self.final_textures[type(building)]
 
         for building, x, y in logic.buildings:
             if not building.built and (x, y) not in self.building_sprites:
                 tile_size = 16 * 2
-
                 sprite = arcade.Sprite(self.construction_texture, scale=2)
                 sprite.center_x = self.offset_x + x * tile_size + tile_size / 2
                 sprite.center_y = self.offset_y + y * tile_size + tile_size / 2
-
                 self.scene.add_sprite("Object", sprite)
                 self.building_sprites[(x, y)] = sprite
 
@@ -320,3 +475,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

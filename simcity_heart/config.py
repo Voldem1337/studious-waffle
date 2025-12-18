@@ -9,6 +9,7 @@ music_player = None
 
 current_world_name = "My World"
 
+effect_volume = 50
 
 def set_volume(new_volume):
     global volume, music_player
@@ -39,7 +40,8 @@ def save_config():
     data = {
         "volume": volume,
         "current_resolution_index": current_resolution_index,
-        "current_world_name": current_world_name
+        "current_world_name": current_world_name,
+        'effect_volume' : effect_volume,
     }
     CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(CONFIG_PATH, "w") as f:
@@ -49,7 +51,7 @@ def save_config():
 
 
 def load_config():
-    global volume, current_resolution_index,current_world_name
+    global volume, current_resolution_index,current_world_name, effect_volume
 
     if not CONFIG_PATH.exists():
         return
@@ -62,7 +64,9 @@ def load_config():
         "current_resolution_index",
         current_resolution_index
     )
+
     current_world_name = data.get("current_world_name")
+    effect_volume = data.get("effect_volume")
 
 def update_world_name(filename):
     global current_world_name
@@ -73,3 +77,11 @@ def stop_music():
     if music_player:
         music_player.pause()
         music_player = None
+
+def set_effect_volume(new_volume):
+    global effect_volume
+    effect_volume = max(0, min(100, new_volume))
+    if music_player:
+        music_player.volume = effect_volume / 100
+    effect_volume = new_volume
+    save_config()
