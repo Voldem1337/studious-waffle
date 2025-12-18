@@ -104,8 +104,9 @@ class Worldname(arcade.View):
         elif symbol == arcade.key.ENTER:
             if not self.world_name.strip():
                 self.world_name = 'My World'
-
-            config.current_world_name = self.world_name.strip()
+            config.load_config()
+            config.update_world_name(self.world_name.strip())
+            config.save_config()
 
             from game_view import GameView
             game = GameView()

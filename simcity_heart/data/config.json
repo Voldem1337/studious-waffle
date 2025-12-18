@@ -1,4 +1,6 @@
 {
-  "volume": 0,
-  "current_resolution_index": 3
+  "volume": 82,
+  "current_resolution_index": 3,
+  "current_world_name": "My World",
+  "effect_volume": 19
 }

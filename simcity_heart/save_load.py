@@ -91,7 +91,7 @@ def deserialize_tile(tile_data):
     return None
 
 
-def save_game(slot_number=1):
+def save_game(file):
     serialized_grid = []
     for row in logic.grid:
         serialized_row = [serialize_tile(tile) for tile in row]
@@ -128,16 +128,16 @@ def save_game(slot_number=1):
     save_dir = Path('data/worlds')
     save_dir.mkdir(exist_ok=True)
 
-    save_path = save_dir / f'save_{slot_number}.json'
+    save_path = save_dir / f'{file}.json'
     with open(save_path, 'w', encoding='utf-8') as f:
         json.dump(save_data, f, indent=2, ensure_ascii=False)
 
-    print(f'Игра сохранена в {save_path}')
+    print(f'Game is saved to {save_path}')
     return True
 
 
-def load_game(slot_number=1):
-    save_path = Path('data/worlds') / f'save_{slot_number}.json'
+def load_game(file):
+    save_path = Path('data/worlds') / f'{file}.json'
 
     if not save_path.exists():
         print(f'Файл сохранения {save_path} не найден')
@@ -171,5 +171,5 @@ def load_game(slot_number=1):
 
     logic.rebuild_buildings_from_grid()
 
-    print(f'Игра загружена из {save_path}')
+    print(f'Game is loaded from{save_path}')
     return True
