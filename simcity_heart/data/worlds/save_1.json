@@ -561,14 +561,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -601,14 +595,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       {
         "type": "Water",
@@ -650,14 +638,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       {
         "type": "Water",
@@ -702,14 +684,8 @@
         "name": "Tree"
       },
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       {
         "type": "Water",
@@ -751,14 +727,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       {
@@ -797,14 +767,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -837,14 +801,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -877,14 +835,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -917,14 +869,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -957,14 +903,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -997,14 +937,8 @@
       null,
       null,
       null,
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
-      {
-        "type": "VerticalRoad",
-        "name": "Vertical Road"
-      },
+      null,
+      null,
       null,
       null,
       null,
@@ -1021,5 +955,5 @@
     ]
   ],
   "buildings": [],
-  "timestamp": 1766007618.8152661
+  "timestamp": 1766053887.6253936
 }

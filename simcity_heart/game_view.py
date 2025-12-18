@@ -15,6 +15,15 @@ class GameView(arcade.View):
             config.music_player.pause()
 
         super().__init__()
+
+        # GAME MUSIC
+        config.load_config()
+        self.birds = arcade.Sound("assets/sounds/Bird sounds- 5 minutes.mp3")
+        self.game_music_player = self.birds.play(
+            volume=config.effect_volume / 100,
+            loop=True
+        )
+
         # Loading the map
         self.tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
 
@@ -115,17 +124,17 @@ class GameView(arcade.View):
         self.scene.draw()
 
         # Game UI
-        arcade.draw_text(f"Date: {logic.get_date_string()}", 10, self.window_height - 30, arcade.color.BLACK, 18)
-        arcade.draw_text(f"Money: {logic.city_money}$", 20, 20, arcade.color.BLACK, 20)
-        arcade.draw_text(f"Happiness: {int(logic.city_happiness)}%", 20, 50, arcade.color.BLACK, 20)
+        arcade.draw_text(f"Date: {logic.get_date_string()}", 10, self.window_height - 30, arcade.color.WHITE, 18)
+        arcade.draw_text(f"Money: {logic.city_money}$", 20, 20, arcade.color.WHITE, 20)
+        arcade.draw_text(f"Happiness: {int(logic.city_happiness)}%", 20, 50, arcade.color.WHITE, 20)
         arcade.draw_text(f"Selected: {self.picked_placeable if self.picked_placeable else 'None'}",
-                         20, 80, arcade.color.BLACK, 20)
-        arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.BLACK, 20)
-        arcade.draw_text(f"City Profit: {logic.city_profit}$/h", 20, 140, arcade.color.BLACK, 20)
+                         20, 80, arcade.color.WHITE, 20)
+        arcade.draw_text(f"Population: {logic.city_population}", 20, 110, arcade.color.WHITE, 20)
+        arcade.draw_text(f"City Profit: {logic.city_profit}$/h", 20, 140, arcade.color.WHITE, 20)
 
         # Demand
         arcade.draw_text(f"Demand:", self.window_width - 200, 80, arcade.color.WHITE, 20)
-        arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.GREEN, 20)
+        arcade.draw_text(f"{round(logic.residential_demand, 2)}", self.window_width - 80, 20, arcade.color.ARMY_GREEN, 20)
         arcade.draw_text(f"{round(logic.commercial_demand, 2)}", self.window_width - 80, 50, arcade.color.BLUE, 20)
         arcade.draw_text(f"{round(logic.industrial_demand, 2)}", self.window_width - 80, 80, arcade.color.YELLOW, 20)
 
@@ -232,7 +241,7 @@ class GameView(arcade.View):
                 self.handle_X = x
                 config.load_config()
                 config.set_effect_volume(int(((self.handle_X - self.left_handle_X) / 350) * 100))
-                self.volume_text.text = f"Volume: {config.effect_volume}%"
+                self.volume_text.text = f"Effect volume: {config.effect_volume}%"
                 config.save_config()
                 return
 
@@ -246,6 +255,7 @@ class GameView(arcade.View):
             if (self.window_middle_x + 74 <= x <= self.window_middle_x + 226 and
                     self.window_middle_y - 165 <= y <= self.window_middle_y - 135):
                 config.load_config()
+                self.game_music_player.pause()
                 save_load.save_game(config.current_world_name)
                 from main import MainView
                 menu = MainView()
@@ -439,6 +449,7 @@ class GameView(arcade.View):
                     self.scene.add_sprite("Object", sprite)
 
     def on_update(self, delta_time: float):
+
         logic.update_time(delta_time)
 
         if time.time() - self.last_update_time > 1:
