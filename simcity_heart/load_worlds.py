@@ -1,6 +1,6 @@
 import arcade
 from pathlib import Path
-
+import config
 
 class Worldname(arcade.View):
 
@@ -86,6 +86,11 @@ class Worldname(arcade.View):
                     game = GameView()
                     game.rebuild_scene_from_logic()
                     self.window.show_view(game)
+                config.load_config()
+                config.update_world_name(world_name.strip())
+                config.save_config()
+
+
 
                 return
 

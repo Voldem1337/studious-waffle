@@ -11,6 +11,10 @@ arcade.resources.add_resource_handle('my-assets', assets_path)
 
 class GameView(arcade.View):
     def __init__(self):
+
+        if config.music_player:
+            config.music_player.pause()
+
         super().__init__()
         # Loading the map
         self.tile_map = arcade.load_tilemap(':my-assets:maps/Starting_location.tmx', scaling=2)
@@ -160,6 +164,7 @@ class GameView(arcade.View):
                 if self.window_middle_x - 138 <= x <= self.window_middle_x - 35 and self.window_middle_y - 25 <= y <= self.window_middle_y + 24:
                     config.load_config()
                     save_load.save_game(config.current_world_name)
+                    config.music_player.play()
                     from main import MainView
                     game = MainView()
                     self.window.show_view(game)

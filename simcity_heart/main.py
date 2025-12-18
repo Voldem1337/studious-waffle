@@ -8,12 +8,15 @@ import config
 
 class MainView(arcade.View):
     def on_show(self):
+
         self.window_width, self.window_height = self.window.get_size()
 
     def __init__(self):
+
         super().__init__()
 
-        self.music_player = config.music_player
+
+        # self.music_player = config.music_player
 
 
         # adding bc
@@ -349,11 +352,12 @@ class MainView(arcade.View):
 
 class Loading_screen(arcade.View):
     def __init__(self):
-        # music loop
-
         self.music = arcade.Sound('assets/music/Menu_music.mp3')
-        self.music_player = self.music.play(volume=config.volume / 100, loop=True)
-        config.set_music_player(self.music_player)
+        config.music_player = self.music.play(
+            volume=config.volume / 100,
+            loop=True
+        )
+
         # initialization picture
         self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2
         super().__init__()

@@ -47,6 +47,7 @@ def save_config():
 
 
 
+
 def load_config():
     global volume, current_resolution_index,current_world_name
 
@@ -66,3 +67,9 @@ def load_config():
 def update_world_name(filename):
     global current_world_name
     current_world_name = filename
+
+def stop_music():
+    global music_player
+    if music_player:
+        music_player.pause()
+        music_player = None

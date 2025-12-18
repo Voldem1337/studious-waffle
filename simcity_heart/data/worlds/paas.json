@@ -1,7 +1,7 @@
 {
   "city": {
-    "money": 10000,
-    "happiness": 48.78048780487804,
+    "money": 8348,
+    "happiness": 48.78048780487805,
     "population": 0,
     "house_count": 0,
     "store_count": 0,
@@ -9,7 +9,7 @@
     "city_jobs": 0
   },
   "demand": {
-    "residential": 2.4390243902439117,
+    "residential": 2.4390243902439024,
     "commercial": 0,
     "industrial": 0
   },
@@ -529,7 +529,10 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       null,
       null,
       null,
@@ -569,7 +572,10 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       null,
       null,
       null,
@@ -609,7 +615,10 @@
         "type": "VerticalRoad",
         "name": "Vertical Road"
       },
-      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       {
         "type": "Water",
         "name": "Water"
@@ -1021,5 +1030,5 @@
     ]
   ],
   "buildings": [],
-  "timestamp": 1766011721.199403
+  "timestamp": 1766048487.520998
 }
