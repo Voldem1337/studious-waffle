@@ -263,8 +263,13 @@ class GameView(arcade.View):
                 config.load_config()
                 self.game_music_player.pause()
                 save_load.save_game(config.current_world_name)
+
                 from main import MainView
                 menu = MainView()
+                self.music = arcade.Sound('assets/music/Menu_music.mp3')
+                config.music_player = self.music.play(
+                    volume=config.volume / 100,
+                    loop=True)
                 self.window.show_view(menu)
                 return
 
@@ -283,7 +288,8 @@ class GameView(arcade.View):
                             option_y <= y <= option_y + self.dropdown_height):
 
                         self.current_resolution_index = i
-                        config.current_resolution_index = i
+
+
                         self.dropdown_open = False
 
                         if res_value is None:
@@ -294,6 +300,8 @@ class GameView(arcade.View):
                             self.window.center_window()
 
                         self._update_ui_positions()
+                        config.current_resolution_index = self.current_resolution_index
+                        config.save_config()
                         return
 
             # If clicked inside settings but not on any control, don't place buildings
@@ -413,6 +421,22 @@ class GameView(arcade.View):
 
         self.left_handle_X = self.window_middle_x - 200
         self.handle_X = self.left_handle_X + 350 * (config.volume / 100)
+        margin = 20
+        self.settings_gear.center_x = self.window.width - self.settings_gear.width / 2 - margin
+        self.settings_gear.center_y = self.window.height - self.settings_gear.height / 2 - margin
+
+        self.map_width = self.tile_map.width * self.tile_map.tile_width * self.tile_map.scaling
+        self.map_height = self.tile_map.height * self.tile_map.tile_height * self.tile_map.scaling
+        self.window_width = self.window.width
+        self.window_height = self.window.height
+
+        self.offset_x = self.window_width / 2 - self.map_width / 2
+        self.offset_y = self.window_height / 2 - self.map_height / 2
+
+
+
+
+
 
     def rebuild_scene_from_logic(self):
         """Rebuild scene from saved logic data"""

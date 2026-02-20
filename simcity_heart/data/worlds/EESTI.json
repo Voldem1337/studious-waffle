@@ -1075,11 +1075,11 @@
         "population": 10,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.011429399950429797,
+        "remaining_time": -0.014522399986162782,
         "built": true
       },
       "x": 16,
-      "y": 12
+      "y": 11
     },
     {
       "building": {
@@ -1090,12 +1090,12 @@
         "population": 10,
         "open_positions": 0,
         "build_time": 10,
-        "remaining_time": -0.014522399986162782,
+        "remaining_time": -0.011429399950429797,
         "built": true
       },
       "x": 16,
-      "y": 11
+      "y": 12
     }
   ],
-  "timestamp": 1766055498.2570844
+  "timestamp": 1771594356.976244
 }

@@ -16,7 +16,6 @@ class MainView(arcade.View):
         super().__init__()
 
 
-        # self.music_player = config.music_player
 
 
         # adding bc
@@ -357,6 +356,7 @@ class Loading_screen(arcade.View):
             volume=config.volume / 100,
             loop=True
         )
+
 
         # initialization picture
         self.window_middle_x, self.window_middle_y = window.width / 2, window.height / 2

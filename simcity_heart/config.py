@@ -37,6 +37,7 @@ def get_save_filename():
 CONFIG_PATH = Path("../simcity_heart/data/config.json")
 
 def save_config():
+    print(current_resolution_index)
     data = {
         "volume": volume,
         "current_resolution_index": current_resolution_index,

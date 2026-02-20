@@ -1,6 +1,6 @@
 {
   "city": {
-    "money": 8348,
+    "money": 5690,
     "happiness": 48.78048780487805,
     "population": 0,
     "house_count": 0,
@@ -15,6 +15,10 @@
   },
   "grid": [
     [
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       null,
       null,
       null,
@@ -26,8 +30,10 @@
       null,
       null,
       null,
-      null,
-      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       null,
       null,
       null,
@@ -52,7 +58,10 @@
       null,
       null,
       null,
-      null
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      }
     ],
     [
       null,
@@ -989,7 +998,10 @@
       null
     ],
     [
-      null,
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      },
       null,
       null,
       null,
@@ -1026,9 +1038,12 @@
       null,
       null,
       null,
-      null
+      {
+        "type": "VerticalRoad",
+        "name": "Vertical Road"
+      }
     ]
   ],
   "buildings": [],
-  "timestamp": 1766048487.520998
+  "timestamp": 1771600483.440722
 }
